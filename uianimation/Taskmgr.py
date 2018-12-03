@@ -8,9 +8,9 @@
 #--------------------------------------------------------------------------------------------------
 from pywinauto.application import Application
 
-app = Application().connect(title="任务管理器")
-app.TaskManagerWindow.set_focus()
-dlg_main = app.TaskManagerWindow["SysListView32"]
+app = Application(backend='uia').connect(title="任务管理器")
+app.Dialog.set_focus()
+dlg_main = app.Dialog.Pane.ListBox
 for item in dlg_main.items():
     print(item.item_data())
     item.select()
