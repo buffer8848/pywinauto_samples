@@ -10,10 +10,11 @@ from pywinauto.application import Application
 from pywinauto import timings
 from time import sleep
 
-app = Application().start(r"C:\Program Files\赢时胜资产财务估值系统V2.5\YssGz.exe")
+app = Application().start(r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe")
 
 #处理登录
 dlg_login = app["估值系统登录"]
+dlg_login.set_focus()
 dlg_login["Edit3"].set_text("1")
 dlg_login["登录(&L)"].click()
 sleep(1)
@@ -37,13 +38,17 @@ sleep(1)
 dlg_main["制作凭证"].set_focus()
 dlg_main["制作凭证"].click()
 sleep(1)
-try:
-    app.top_window()["是(Y)"].set_focus()
-    app.top_window()["是(Y)"].click()
-except Exception:
-    None
+status = True
+while status: #判断各种异常的弹框，都点yes
+    try:
+        if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():
+            status = False
+        app.top_window()["是(Y)"].set_focus()
+        app.top_window()["是(Y)"].click()
+        sleep(1)
+    except Exception:
+        None
 
-app["业务凭证管理"].wait('ready')
 try:
     app.top_window()["确定"].set_focus()
     app.top_window()["确定"].click()

@@ -10,10 +10,11 @@ from pywinauto.application import Application
 from pywinauto import timings
 from time import sleep
 
-app = Application(backend="win32").start(r"C:\Program Files\赢时胜资产财务估值系统V2.5\YssGz.exe")
+app = Application(backend="win32").start(r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe")
 
 #处理登录
 dlg_login = app["估值系统登录"]
+dlg_login.set_focus()
 dlg_login["Edit3"].set_text("1")
 dlg_login["登录(&L)"].click()
 sleep(1)
@@ -26,6 +27,7 @@ sleep(1)
 
 #打开数据管理
 dlg_main = app["ThunderRT6MDIForm"]
+dlg_main.set_focus()
 ctl_sysnvg = dlg_main["系统功能导航"]
 ctl_sysnvg.ThunderRT6UserControlDC6.click()
 sleep(1)
@@ -33,12 +35,15 @@ sleep(1)
 #进入到数据管理页面
 ctl_treedview = dlg_main["TreeView20WndClass2"]
 ctl_treedview.set_focus()
-ctl_treedview.click(coords=(80, 100))
+ctl_treedview.click(coords=(60, 80))
 sleep(1)
 dlg_main["读取数据"].set_focus()
 dlg_main["读取数据"].click()
 sleep(1)
-app["提示信息"]["是(Y)"].click()
+try:
+    app["提示信息"]["是(Y)"].click()
+except Exception:
+    None
 sleep(1)
 app.top_window()["确定"].click()
 sleep(1)

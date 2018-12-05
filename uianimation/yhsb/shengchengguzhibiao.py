@@ -10,10 +10,11 @@ from pywinauto.application import Application
 from pywinauto import timings
 from time import sleep
 
-app = Application().start(r"C:\Program Files\赢时胜资产财务估值系统V2.5\YssGz.exe")
+app = Application().start(r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe")
 
 #处理登录
 dlg_login = app["估值系统登录"]
+dlg_login.set_focus()
 dlg_login["Edit3"].set_text("1")
 dlg_login["登录(&L)"].click()
 sleep(1)
@@ -41,15 +42,18 @@ sleep(1)
 ctl_gen = dlg_main["生 成"]
 ctl_gen.click()
 sleep(1)
-
-try:
-    while True:
-        app.top_window()["确定"].set_focus() #如果有出错信息点击确定
+status = True
+while status: #判断各种异常的弹框，都点确定
+    try:
+        if app["基金资产估值表Dialog"]["产生完毕!"].exists():
+            app["基金资产估值表Dialog"].set_focus()
+            app["基金资产估值表Dialog"]["确定"].click()
+            status = False
+        app.top_window()["确定"].set_focus()
         app.top_window()["确定"].click()
-        sleep(3)
-except Exception:
-    None
-sleep(1)
+        sleep(1)
+    except Exception:
+        None
 
 #退出
 
