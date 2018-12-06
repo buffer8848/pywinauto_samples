@@ -39,6 +39,14 @@ dlg_main.menu_select("电子对帐 -> 对帐结果管理")
 dlg_main.set_focus()
 dlg_main["查询"].click()
 
+#输入日期
+dlg_main["DTPicker20WndClass2"].set_focus()
+send_keys("2018")
+send_keys("{RIGHT}")
+send_keys("12")
+send_keys("{RIGHT}")
+send_keys("05")
+
 #点击右键菜单
 dlg_main["数据管理"].set_focus()
 dlg_main["数据管理"].ThunderRT6UserControlDC.click(button=u'right', coords=(300,300))

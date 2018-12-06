@@ -7,6 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 from pywinauto.application import Application
+from pywinauto.keyboard import send_keys
 from pywinauto import timings
 from time import sleep
 
@@ -31,6 +32,17 @@ dlg_main.set_focus()
 ctl_sysnvg = dlg_main["系统功能导航"]
 ctl_sysnvg.ThunderRT6UserControlDC6.click()
 sleep(1)
+
+#输入日期
+dlg_main["DTPicker20WndClass2"].set_focus()
+send_keys("2018")
+send_keys("{RIGHT}")
+send_keys("12")
+send_keys("{RIGHT}")
+send_keys("05")
+
+#输入文件路径
+dlg_main["按时间段读取Edit2"].set_text(r"F:\估值相关测试数据\QS\QS101")
 
 #进入到数据管理页面
 ctl_treedview = dlg_main["TreeView20WndClass2"]

@@ -7,6 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 from pywinauto.application import Application
+from pywinauto.keyboard import send_keys
 from pywinauto import timings
 from time import sleep
 
@@ -30,6 +31,14 @@ dlg_main = app["ThunderRT6MDIForm"]
 ctl_sysnvg = dlg_main["系统功能导航"]
 ctl_sysnvg.ThunderRT6UserControlDC5.click()
 sleep(1)
+
+#输入日期
+dlg_main["DTPicker20WndClass2"].set_focus()
+send_keys("2018")
+send_keys("{RIGHT}")
+send_keys("12")
+send_keys("{RIGHT}")
+send_keys("05")
 
 #进入到数据管理页面
 ctl_treedview = dlg_main["非结转损益"]

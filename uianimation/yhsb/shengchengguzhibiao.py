@@ -7,6 +7,7 @@
 #--------------------------------------------------------------------------------------------------
 
 from pywinauto.application import Application
+from pywinauto.keyboard import send_keys
 from pywinauto import timings
 from time import sleep
 
@@ -30,6 +31,14 @@ dlg_main = app["ThunderRT6MDIForm"]
 ctl_sysnvg = dlg_main["msvb_lib_toolbar"]
 ctl_sysnvg.click(coords=(415,15))
 sleep(1)
+
+#输入日期
+dlg_main["DTPicker20WndClass2"].set_focus()
+send_keys("2018")
+send_keys("{RIGHT}")
+send_keys("12")
+send_keys("{RIGHT}")
+send_keys("05")
 
 #勾选生成估值余额对账数据
 dlg_main["生成估值余额对账数据"].check()
