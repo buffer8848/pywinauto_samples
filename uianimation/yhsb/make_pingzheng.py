@@ -50,8 +50,11 @@ sleep(1)
 status = True
 while status: #判断各种异常的弹框，都点yes
     try:
-        if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():
-            status = False
+        try:
+            if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():
+                status = False
+        except Exception:
+            None
         app.top_window()["是(Y)"].set_focus()
         app.top_window()["是(Y)"].click()
         sleep(1)

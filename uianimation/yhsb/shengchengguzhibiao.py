@@ -54,10 +54,13 @@ sleep(1)
 status = True
 while status: #判断各种异常的弹框，都点确定
     try:
-        if app["基金资产估值表Dialog"]["产生完毕!"].exists():
-            app["基金资产估值表Dialog"].set_focus()
-            app["基金资产估值表Dialog"]["确定"].click()
-            status = False
+        try:
+            if app["基金资产估值表Dialog"]["产生完毕!"].exists():
+                app["基金资产估值表Dialog"].set_focus()
+                app["基金资产估值表Dialog"]["确定"].click()
+                status = False
+        except Exception:
+            None
         app.top_window()["确定"].set_focus()
         app.top_window()["确定"].click()
         sleep(1)

@@ -34,15 +34,19 @@ ctl_sysnvg.ThunderRT6UserControlDC6.click()
 sleep(1)
 
 #输入日期
+year="2018"
+month="12"
+day="05"
 dlg_main["DTPicker20WndClass2"].set_focus()
-send_keys("2018")
+send_keys(year)
 send_keys("{RIGHT}")
-send_keys("12")
+send_keys(month)
 send_keys("{RIGHT}")
-send_keys("05")
+send_keys(day)
+send_keys("{ENTER}")
 
 #输入文件路径
-dlg_main["按时间段读取Edit2"].set_text(r"F:\估值相关测试数据\QS\QS101")
+dlg_main["按时间段读取Edit2"].set_text(r'F:\估值相关测试数据\QS\QS101' + '\\' + year + month + day)
 
 #进入到数据管理页面
 ctl_treedview = dlg_main["TreeView20WndClass2"]
@@ -52,13 +56,20 @@ sleep(1)
 dlg_main["读取数据"].set_focus()
 dlg_main["读取数据"].click()
 sleep(1)
-try:
-    app["提示信息"]["是(Y)"].click()
-except Exception:
-    None
-sleep(1)
-app.top_window()["确定"].click()
-sleep(1)
+while True: #等待保存成功后的弹窗
+    try:
+        try:
+            if app["数据接口管理Dialog"]["读取完毕"].exists():
+                app["数据接口管理Dialog"].set_focus()
+                app["数据接口管理Dialog"]["确定"].click()
+                break
+        except Exception:
+            None
+        app.top_window()["是(Y)"].set_focus()
+        app.top_window()["是(Y)"].click()
+        sleep(1)
+    except Exception:
+        None
 
 #退出
 try:

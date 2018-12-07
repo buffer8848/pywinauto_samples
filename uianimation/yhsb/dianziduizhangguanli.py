@@ -68,10 +68,13 @@ sleep(2)
 
 while True: #等待保存成功后的弹窗
     try:
-        if app["导出EXCEL文件Dialog"]["确定"].exists():
-            app["导出EXCEL文件Dialog"].set_focus()
-            app["导出EXCEL文件Dialog"]["确定"].click()
-            break
+        try:
+            if app["导出EXCEL文件Dialog"]["确定"].exists():
+                app["导出EXCEL文件Dialog"].set_focus()
+                app["导出EXCEL文件Dialog"]["确定"].click()
+                break
+        except Exception:
+            None
         app.top_window()["是(Y)"].set_focus()
         app.top_window()["是(Y)"].click()
         sleep(1)
