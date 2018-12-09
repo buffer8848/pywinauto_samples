@@ -46,6 +46,7 @@ def Shengcheng_guzhibiao(year, month, day):
     send_keys(month)
     send_keys("{RIGHT}")
     send_keys(day)
+    sleep(2)
 
     #勾选生成估值余额对账数据
     dlg_main["生成估值余额对账数据"].check()
@@ -55,11 +56,12 @@ def Shengcheng_guzhibiao(year, month, day):
     sleep(1)
 
     #点击生成
-    ctl_gen = dlg_main["生 成"]
-    ctl_gen.click()
+    dlg_main["生 成"].set_focus()
+    dlg_main["生 成"].click()
     sleep(1)
     status = True
     while status: #判断各种异常的弹框，都点确定
+        #app.top_window().set_focus()
         try:
             try:
                 if app["基金资产估值表Dialog"]["产生完毕!"].exists():
@@ -68,8 +70,8 @@ def Shengcheng_guzhibiao(year, month, day):
                     status = False
             except Exception:
                 None
-            app.top_window()["确定"].set_focus()
-            app.top_window()["确定"].click()
+            app["基金资产估值表"]["确定"].set_focus()
+            app["基金资产估值表"]["确定"].click()
             sleep(1)
         except Exception:
             None

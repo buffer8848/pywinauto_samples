@@ -46,6 +46,7 @@ def Zhizuo_pingzheng(year, month, day):
     send_keys(month)
     send_keys("{RIGHT}")
     send_keys(day)
+    sleep(2)
 
     #进入到数据管理页面
     ctl_treedview = dlg_main["非结转损益"]

@@ -53,6 +53,7 @@ def Guanli_dianziduizhang(year, month, day):
     send_keys(month)
     send_keys("{RIGHT}")
     send_keys(day)
+    sleep(2)
 
     #点击右键菜单
     dlg_main["数据管理"].set_focus()
@@ -70,8 +71,10 @@ def Guanli_dianziduizhang(year, month, day):
     dlg_outxls.set_focus()
     dlg_outxls.Edit2.set_text(r"F:\tool\buffer\data")
     dlg_outxls.Edit3.set_text(r"对帐结果管理.xls")
-    dlg_outxls["确 定"].click()
     sleep(2)
+    dlg_outxls["确 定"].set_focus()
+    dlg_outxls["确 定"].click()
+    sleep(3)
 
     while True: #等待保存成功后的弹窗
         try:
