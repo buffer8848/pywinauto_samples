@@ -53,6 +53,7 @@ def Daochu_toucunbaobiao(year, month, day):
     send_keys("{RIGHT}")
     send_keys(day)
     send_keys("{ENTER}")
+    sleep(2)
 
     #just for test 为了快速调试减少基金数
     #dlg_main["功能选项>>"].set_focus()

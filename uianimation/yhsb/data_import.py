@@ -30,14 +30,14 @@ def Daochu_shuju(year, month, day):
         app.top_window()["否(N)"].click()
     except Exception:
         None
-    sleep(1)
+    sleep(3)
 
     #打开数据管理
     dlg_main = app["ThunderRT6MDIForm"]
     dlg_main.set_focus()
     ctl_sysnvg = dlg_main["系统功能导航"]
     ctl_sysnvg.ThunderRT6UserControlDC6.click()
-    sleep(1)
+    sleep(3)
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
