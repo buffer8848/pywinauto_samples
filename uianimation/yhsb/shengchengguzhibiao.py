@@ -7,7 +7,7 @@
 #--------------------------------------------------------------------------------------------------
 
 from pywinauto.application import Application
-from pywinauto.keyboard import send_keys
+from pywinauto.keyboard import SendKeys
 from pywinauto import timings
 from time import sleep
 
@@ -41,11 +41,11 @@ def Shengcheng_guzhibiao(year, month, day):
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
     sleep(2)
 
     #勾选生成估值余额对账数据
@@ -63,23 +63,23 @@ def Shengcheng_guzhibiao(year, month, day):
     while status: #判断各种异常的弹框，都点确定
         #app.top_window().set_focus()
         try:
-            try:
-                if app["基金资产估值表Dialog"]["产生完毕!"].exists():
-                    app["基金资产估值表Dialog"].set_focus()
-                    app["基金资产估值表Dialog"]["确定"].click()
-                    status = False
-            except Exception:
-                None
-            app["基金资产估值表"]["确定"].set_focus()
-            app["基金资产估值表"]["确定"].click()
-            sleep(1)
+            fuck = app.top_window()["确定"]
+            if app["基金资产估值表Dialog"]["产生完毕!"].exists():
+                app["基金资产估值表Dialog"].set_focus()
+                app["基金资产估值表Dialog"]["确定"].click()
+                status = False
+            else:
+                fuck.click()
+                sleep(1)
         except Exception:
             None
 
     #退出
-
     try:
         dlg_main.close()
     except timings.TimeoutError:
         app.top_window()["是(Y)"].set_focus()
         app.top_window()["是(Y)"].click()
+
+if __name__ == "__main__":
+    Shengcheng_guzhibiao("2018", "12", "13")

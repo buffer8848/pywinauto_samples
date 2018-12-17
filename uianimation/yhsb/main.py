@@ -36,5 +36,3 @@ if __name__ == "__main__":
 
         run_count += 1
         print("auto runing count:" + str(run_count))
-
-

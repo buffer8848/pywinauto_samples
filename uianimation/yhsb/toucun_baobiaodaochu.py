@@ -7,7 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 from pywinauto.application import Application
-from pywinauto.keyboard import send_keys
+from pywinauto.keyboard import SendKeys
 from pywinauto import mouse
 from pywinauto import timings
 from time import sleep
@@ -47,12 +47,12 @@ def Daochu_toucunbaobiao(year, month, day):
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
-    send_keys("{ENTER}")
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
+    SendKeys("{ENTER}")
     sleep(2)
 
     #just for test 为了快速调试减少基金数
@@ -87,8 +87,8 @@ def Daochu_toucunbaobiao(year, month, day):
     #输出excel
     dlg_outxls = app["输出EXCEL"]
     dlg_outxls.set_focus()
-    #dlg_outxls.Edit2.set_text(r"F:\tool\buffer\data")
-    #dlg_outxls.Edit3.set_text(r"对帐结果管理.xls")
+    dlg_outxls.Edit2.set_text(r"C:\tool\buffer\data")
+    dlg_outxls.Edit3.set_text(r"对帐结果管理.xls")
     dlg_outxls["确 定"].click()
     sleep(2)
 

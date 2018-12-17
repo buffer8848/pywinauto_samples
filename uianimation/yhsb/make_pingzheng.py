@@ -7,7 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 from pywinauto.application import Application
-from pywinauto.keyboard import send_keys
+from pywinauto.keyboard import SendKeys
 from pywinauto import timings
 from time import sleep
 
@@ -41,11 +41,11 @@ def Zhizuo_pingzheng(year, month, day):
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
     sleep(2)
 
     #进入到数据管理页面

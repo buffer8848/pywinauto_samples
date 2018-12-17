@@ -7,7 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 from pywinauto.application import Application
-from pywinauto.keyboard import send_keys
+from pywinauto.keyboard import SendKeys
 from pywinauto import timings
 from time import sleep
 
@@ -48,11 +48,11 @@ def Guanli_dianziduizhang(year, month, day):
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
     sleep(2)
 
     #点击右键菜单
@@ -60,11 +60,11 @@ def Guanli_dianziduizhang(year, month, day):
     dlg_main["数据管理"].ThunderRT6UserControlDC.click(button=u'right', coords=(300,300))
     #选择菜单
     #app.menu_select["报表输出 -> 输出为Excel文件"]
-    send_keys("{DOWN 6}")
+    SendKeys("{DOWN 6}")
     sleep(2)
-    send_keys("{RIGHT}")
+    SendKeys("{RIGHT}")
     sleep(2)
-    send_keys("{ENTER}")
+    SendKeys("{ENTER}")
 
     #输出excel
     dlg_outxls = app["输出EXCEL"]
