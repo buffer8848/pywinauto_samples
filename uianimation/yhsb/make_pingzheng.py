@@ -11,7 +11,7 @@ from pywinauto.keyboard import SendKeys
 from pywinauto import timings
 from time import sleep
 
-from common import restart_if_app_exist
+from common import *
 
 def Zhizuo_pingzheng(year, month, day):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -58,6 +58,9 @@ def Zhizuo_pingzheng(year, month, day):
     status = True
     while status: #判断各种异常的弹框，都点yes
         try:
+            if verify_control_exception(app.top_window(), []):
+                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                sleep(300)
             try:
                 if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():
                     status = False

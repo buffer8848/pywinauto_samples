@@ -12,7 +12,7 @@ from pywinauto import mouse
 from pywinauto import timings
 from time import sleep
 
-from common import restart_if_app_exist
+from common import *
 
 def Daochu_toucunbaobiao(year, month, day):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssReport.exe"
@@ -70,6 +70,10 @@ def Daochu_toucunbaobiao(year, month, day):
 
     while True: #等待保存成功后的弹窗
         try:
+            if verify_control_exception(app.top_window(), []):
+                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                sleep(300)
+
             try:
                 if not dlg_main["Progress Bar"].exists():
                     break
@@ -95,6 +99,10 @@ def Daochu_toucunbaobiao(year, month, day):
     #等待保存的进度条出现
     while True: #等待保存成功后的弹窗
         try:
+            if verify_control_exception(app.top_window(), []):
+                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                sleep(300)
+                
             try:
                 app["导出EXCEL文件Dialog"]["是(Y)"].set_focus()
                 app["导出EXCEL文件Dialog"]["是(Y)"].click()

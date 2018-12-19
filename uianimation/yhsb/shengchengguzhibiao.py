@@ -11,7 +11,7 @@ from pywinauto.keyboard import SendKeys
 from pywinauto import timings
 from time import sleep
 
-from common import restart_if_app_exist
+from common import *
 
 def Shengcheng_guzhibiao(year, month, day):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -63,6 +63,10 @@ def Shengcheng_guzhibiao(year, month, day):
     while status: #判断各种异常的弹框，都点确定
         #app.top_window().set_focus()
         try:
+            if verify_control_exception(app.top_window(), []):
+                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                sleep(300)
+
             fuck = app.top_window()["确定"]
             if app["基金资产估值表Dialog"]["产生完毕!"].exists():
                 app["基金资产估值表Dialog"].set_focus()

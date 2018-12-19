@@ -13,8 +13,7 @@ from pywinauto import timings
 from time import sleep
 #import pytesseract
 #import pyautogui as auto
-from common import restart_if_app_exist
-from common import get_position_of_jijin_list
+from common import *
 #import getContent as gd
 
 def Daochu_shuju(year, month, day):
@@ -69,7 +68,7 @@ def Daochu_shuju(year, month, day):
         dlg_main["TreeView20WndClass1"].set_focus()
         mouse.click(coords=(v[0], v[1]))
         sleep(1)
-
+		
     ctl_treedview = dlg_main["TreeView20WndClass2"]
     ctl_treedview.set_focus()
     ctl_treedview.click(coords=(60, 80))
@@ -79,6 +78,9 @@ def Daochu_shuju(year, month, day):
     sleep(1)
     while True: #等待保存成功后的弹窗
         try:
+            if verify_control_exception(app.top_window(), []):
+                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                sleep(300)
             try:
                 if app["数据接口管理Dialog"]["读取完毕"].exists():
                     app["数据接口管理Dialog"].set_focus()
@@ -99,7 +101,3 @@ def Daochu_shuju(year, month, day):
         app.top_window()["是(Y)"].click()
 
 #dlg_login.print_control_identifiers()
-
-#dlg_login.print_control_identifiers()
-if __name__ == '__main__':
-    Daochu_shuju("2018", "12", "13")

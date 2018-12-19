@@ -11,7 +11,7 @@ from pywinauto.keyboard import SendKeys
 from pywinauto import timings
 from time import sleep
 
-from common import restart_if_app_exist
+from common import *
 
 def Guanli_dianziduizhang(year, month, day):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -78,6 +78,10 @@ def Guanli_dianziduizhang(year, month, day):
 
     while True: #等待保存成功后的弹窗
         try:
+            if verify_control_exception(app.top_window(), []):
+                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                sleep(300)
+                
             try:
                 if app["导出EXCEL文件Dialog"]["确定"].exists():
                     app["导出EXCEL文件Dialog"].set_focus()
