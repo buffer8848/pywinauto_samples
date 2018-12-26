@@ -44,7 +44,7 @@ def Daochu_shuju(year, month, day):
     sleep(2)
 
     #输入文件路径
-    dlg_main["按时间段读取Edit2"].set_text(r'C:\估值相关测试数据\QS\QS101' + '\\qw')
+    dlg_main["按时间段读取Edit2"].set_text(r'C:\估值相关测试数据\QS\QS101\\'+year+month+day)
 
     #进入到数据管理页面
     ctl_treedview = dlg_main["TreeView20WndClass"]
@@ -58,11 +58,10 @@ def Daochu_shuju(year, month, day):
     for (k, v) in dict.items():
         dlg_main["TreeView20WndClass1"].set_focus()
         mouse.click(coords=(v[0], v[1]))
-        sleep(1)
 		
     ctl_treedview = dlg_main["TreeView20WndClass2"]
     ctl_treedview.set_focus()
-    ctl_treedview.click(coords=(60, 80))
+    ctl_treedview.click(coords=(60, 100))
     sleep(1)
     dlg_main["读取数据"].set_focus()
     dlg_main["读取数据"].click()

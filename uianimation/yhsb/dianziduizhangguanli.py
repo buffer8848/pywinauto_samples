@@ -35,7 +35,8 @@ def Guanli_dianziduizhang(year, month, day):
     #点击电子对账管理
     dlg_main.set_focus()
     dlg_main.menu_select("电子对帐 -> 对帐结果管理")
-    dlg_main.set_focus()
+    sleep(1)
+    dlg_main["查询"].set_focus()
     dlg_main["查询"].click()
 
     #输入日期

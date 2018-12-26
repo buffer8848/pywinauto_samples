@@ -1,24 +1,27 @@
 # -*- coding: UTF-8 -*-
 
+import os
 import time
 import sys
+import multiprocessing
 from windowsmomo import *
-#import pyautogui as auto
 from data_import import Daochu_shuju
 from make_pingzheng import Zhizuo_pingzheng
 from shengchengguzhibiao import Shengcheng_guzhibiao
 from dianziduizhangguanli import Guanli_dianziduizhang
 from toucun_baobiaodaochu import Daochu_toucunbaobiao
 from zichan_baobiaodaochu import Daochu_zichanbaobiao
-from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-
+from multiprocessing import Process, Lock
+from PyQt5.QtCore import pyqtSignal, QObject, Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QDialog
+from multiprocessing import Pool
 import datetime
 
-sys.coinit_flags = 2
 ascale = 0.73
 a1scale = 0.7
 a2scale = 0.63
+lock = Lock()
+
 year = str(datetime.datetime.now().year)
 month = str(datetime.datetime.now().month)
 day = str(datetime.datetime.now().day)
@@ -40,15 +43,38 @@ class Communicate(QObject):
     wait3 = pyqtSignal()
     waittmp = pyqtSignal()
 
-class MyWindow(QMainWindow, Ui_MainWindow2):
+class MyWindow(QMainWindow, Ui_mainWindow):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
         self.setupUi(self)
         self.startUp()
 
     def startUp(self):
+        self.pool = Pool(processes=None)
         self.s = Communicate()
         self.startButton.clicked.connect(self.on_click)
+        self.PauseButton.clicked.connect(self.pause_click)
+        self.quitButton.clicked.connect(self.pause_click)
+        self.step4Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step4Label.customContextMenuRequested.connect(self.custom_right_menu_step4)
+        self.step5Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step5Label.customContextMenuRequested.connect(self.custom_right_menu_step5)
+        self.step6Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step6Label.customContextMenuRequested.connect(self.custom_right_menu_step6)
+        self.step9Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step9Label.customContextMenuRequested.connect(self.custom_right_menu_step9)
+        self.step10Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step10Label.customContextMenuRequested.connect(self.custom_right_menu_step10)
+        self.step7Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step7Label.customContextMenuRequested.connect(self.custom_right_menu_step7)
+        self.step11Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step11Label.customContextMenuRequested.connect(self.custom_right_menu_step11)
+        self.arrows2LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.arrows2LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait1)
+        self.arrows7LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.arrows7LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait2)
+        self.arrows11LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.arrows11LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait3)
         self.s.step1.connect(self.step1Changed)
         self.s.step2.connect(self.step2Changed)
         self.s.step3.connect(self.step3Changed)
@@ -68,6 +94,130 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
     def on_click(self):
         print(self.setTime.isChecked())
         self.s.step1.emit()
+
+    def pause_click(self):
+        os.system("pause")
+
+    def custom_right_menu_step4(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("重做")
+        opt2 = menu.addAction("禁用")
+        opt3 = menu.addAction("设置使用时间")
+        action = menu.exec_(self.step4Label.mapToGlobal(pos))
+        if action == opt1:
+            self.step4Changed()
+        elif action == opt2:
+            print('2')
+        elif action == opt3:
+            print('3')
+        else:
+            print('4')
+
+    def custom_right_menu_step5(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("重做")
+        opt2 = menu.addAction("禁用")
+        opt3 = menu.addAction("设置使用时间")
+        action = menu.exec_(self.step5Label.mapToGlobal(pos))
+        if action == opt1:
+            self.step5Changed()
+        elif action == opt2:
+            print('2')
+        elif action == opt3:
+            print('3')
+        else:
+            print('4')
+
+    def custom_right_menu_step6(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("重做")
+        opt2 = menu.addAction("禁用")
+        opt3 = menu.addAction("设置使用时间")
+        action = menu.exec_(self.step6Label.mapToGlobal(pos))
+        if action == opt1:
+            self.step6Changed()
+        elif action == opt2:
+            print('2')
+        elif action == opt3:
+            print('3')
+        else:
+            print('4')
+
+    def custom_right_menu_step9(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("重做")
+        opt2 = menu.addAction("禁用")
+        opt3 = menu.addAction("设置使用时间")
+        action = menu.exec_(self.step9Label.mapToGlobal(pos))
+        if action == opt1:
+            self.step9Changed()
+        elif action == opt2:
+            print('2')
+        elif action == opt3:
+            print('3')
+        else:
+            print('4')
+
+    def custom_right_menu_step10(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("重做")
+        opt2 = menu.addAction("禁用")
+        opt3 = menu.addAction("设置使用时间")
+        action = menu.exec_(self.step10Label.mapToGlobal(pos))
+        if action == opt1:
+            self.step10Changed()
+        elif action == opt2:
+            print('2')
+        elif action == opt3:
+            print('3')
+        else:
+            print('4')
+
+    def custom_right_menu_step7(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("设置等待时间")
+        action = menu.exec_(self.step7Label.mapToGlobal(pos))
+        if action == opt1:
+            print('1')
+        else:
+            print('2')
+
+    def custom_right_menu_step11(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("设置等待时间")
+        action = menu.exec_(self.step11Label.mapToGlobal(pos))
+        if action == opt1:
+            print('1')
+        else:
+            print('2')
+
+
+    def custom_right_menu_wait1(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("设置等待时间")
+        action = menu.exec_(self.arrows2LongLabel.mapToGlobal(pos))
+        if action == opt1:
+            print('1')
+        else:
+            print('2')
+
+    def custom_right_menu_wait2(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("设置等待时间")
+        action = menu.exec_(self.arrows7LongLabel.mapToGlobal(pos))
+        if action == opt1:
+            print('1')
+        else:
+            print('2')
+
+    def custom_right_menu_wait3(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("设置等待时间")
+        action = menu.exec_(self.arrows11LongLabel.mapToGlobal(pos))
+        if action == opt1:
+            print('1')
+        else:
+            print('2')
 
     def step1Changed(self):
         frame = QImage('image/startD.png')
@@ -152,7 +302,6 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         time.sleep(2)
         self.s.step4.emit()
 
-
     def step4Changed(self):
         frame = QImage('image/setupL.png')
         imgw, imgh = frame.width(), frame.height()
@@ -173,8 +322,7 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         self.step4Label.setPixmap(pix)
         QApplication.processEvents()
         print('s4')
-        Daochu_shuju(year, month, day)
-        self.s.step5.emit()
+        self.pool.apply_async(func=Daochu_shuju, args=(year, month, day), callback=lambda x: self.s.step5.emit())
 
     def step5Changed(self):
         frame = QImage('image/loadL.png')
@@ -195,8 +343,7 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step5Label.setPixmap(pix)
         QApplication.processEvents()
-        Zhizuo_pingzheng(year, month, day)
-        self.s.step6.emit()
+        self.pool.apply_async(func=Zhizuo_pingzheng, args=(year, month, day), callback=lambda x: self.s.step6.emit())
 
     def step6Changed(self):
         frame = QImage('image/makeKeyL.png')
@@ -217,8 +364,7 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step6Label.setPixmap(pix)
         QApplication.processEvents()
-        Shengcheng_guzhibiao(year, month, day)
-        self.s.step7.emit()
+        self.pool.apply_async(func=Shengcheng_guzhibiao, args=(year, month, day), callback=lambda x: self.s.step7.emit())
 
     def step7Changed(self):
         frame = QImage('image/productL.png')
@@ -264,13 +410,6 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         time.sleep(2)
         self.s.step8.emit()
 
-        # if self.setTime.isChecked():
-        #     startT = self.startTimeEdit.text()
-        #     endT = self.endTimeEdit.text()
-        #     print(startT, endT)
-        # else:
-        #     print('NoTime')
-
     def step8Changed(self):
         frame = QImage('image/arrowsLongL.png')
         imgw, imgh = frame.width(), frame.height()
@@ -312,8 +451,7 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
-        Guanli_dianziduizhang(year, month, day)
-        self.s.step10.emit()
+        self.pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
 
     def step10Changed(self):
         frame = QImage('image/mngL.png')
@@ -334,8 +472,7 @@ class MyWindow(QMainWindow, Ui_MainWindow2):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
-        Daochu_zichanbaobiao(year, month, day)
-        self.s.step11.emit()
+        self.pool.apply_async(func=Daochu_zichanbaobiao, args=(year, month, day))
 
     def step11Changed(self):
         frame = QImage('image/sendL.png')

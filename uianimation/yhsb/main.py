@@ -18,10 +18,13 @@ from toucun_baobiaodaochu import Daochu_toucunbaobiao
 if __name__ == "__main__":
     year = "2018"
     month = "12"
-    day = 0
+    number = 0
     run_count = 0;
     while True:
-        day = 
+        number += 1
+        if number > 31:
+            number = 1
+        day = "%02d" % (number)
         Daochu_shuju(year, month, day)
         sleep(5)
         Zhizuo_pingzheng(year, month, day)
