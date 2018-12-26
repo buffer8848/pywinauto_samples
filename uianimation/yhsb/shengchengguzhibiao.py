@@ -12,6 +12,7 @@ from pywinauto import timings
 from time import sleep
 
 from common import *
+from login import process_app_login
 
 def Shengcheng_guzhibiao(year, month, day):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -21,16 +22,7 @@ def Shengcheng_guzhibiao(year, month, day):
     app = Application().start(exepath)
 
     #处理登录
-    dlg_login = app["估值系统登录"]
-    dlg_login.set_focus()
-    dlg_login["Edit3"].set_text("1")
-    dlg_login["登录(&L)"].click()
-    sleep(1)
-    try:
-        app.top_window()["否(N)"].set_focus()
-        app.top_window()["否(N)"].click()
-    except Exception:
-        None
+    process_app_login(app)
     sleep(1)
 
     #打开数据管理

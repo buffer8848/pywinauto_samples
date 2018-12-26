@@ -14,6 +14,7 @@ from time import sleep
 #import pytesseract
 #import pyautogui as auto
 from common import *
+from login import process_app_login
 #import getContent as gd
 
 def Daochu_shuju(year, month, day):
@@ -22,17 +23,7 @@ def Daochu_shuju(year, month, day):
     sleep(3)
     app = Application(backend="win32").start(exepath)
 
-    #处理登录
-    dlg_login = app["估值系统登录"]
-    dlg_login.set_focus()
-    dlg_login["Edit3"].set_text("1")
-    dlg_login["登录(&L)"].click()
-    sleep(1)
-    try:
-        app.top_window()["否(N)"].set_focus()
-        app.top_window()["否(N)"].click()
-    except Exception:
-        None
+    process_app_login(app)
     sleep(3)
 
     #打开数据管理
