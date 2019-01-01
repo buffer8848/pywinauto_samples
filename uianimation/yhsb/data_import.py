@@ -18,7 +18,7 @@ from login import process_app_login
 #import getContent as gd
 
 def Daochu_shuju(year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
     restart_if_app_exist(exepath)
     sleep(3)
@@ -69,7 +69,7 @@ def Daochu_shuju(year, month, day, blacklist, email_server_url,
     sleep(1)
     while True: #等待保存成功后的弹窗
         try:
-            if verify_control_exception(app.top_window(), []):
+            if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
                 sleep(300)
             try:

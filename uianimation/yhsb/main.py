@@ -34,7 +34,8 @@ if __name__ == "__main__":
         if number > 31:
             number = 1
         day = "%02d" % (number)
-        Daochu_shuju(year, month, day)
+        Daochu_shuju(year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected)
         sleep(5)
         Zhizuo_pingzheng(year, month, day, blacklist, email_server_url, 
             email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected)

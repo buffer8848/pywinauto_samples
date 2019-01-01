@@ -15,7 +15,7 @@ from common import *
 from login import process_app_login
 
 def Zhizuo_pingzheng(year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
     restart_if_app_exist(exepath)
     sleep(3)

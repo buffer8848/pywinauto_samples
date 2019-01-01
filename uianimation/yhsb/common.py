@@ -51,7 +51,7 @@ def capture_current_screen():
     None
 
 #发送邮件通知到指定的帐户
-def send_email_to_admin(message, sender, reciever):
+def send_email_to_admin(message, server, port, sender, reciever):
     # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
     message = MIMEText(message, 'plain', 'utf-8')
     message['From'] = Header("自动化测试程序", 'utf-8')   # 发送者
@@ -60,7 +60,7 @@ def send_email_to_admin(message, sender, reciever):
     subject = '自动化测试程序发生异常，请处理！'
     message['Subject'] = Header(subject, 'utf-8')
     
-    smtpObj = smtplib.SMTP('smtp.qq.com', 25)
+    smtpObj = smtplib.SMTP(server, port)
     smtpObj.login('179770346@qq.com','cbkjnrbsvahjcaee')
     try:
         smtpObj.sendmail(sender, reciever, message.as_string())

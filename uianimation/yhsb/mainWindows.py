@@ -33,6 +33,7 @@ blacklist = [] #存放用户遇到这些窗口之后就停止的黑名单
 email_server_url = "smtp.qq.com" #发送邮件的服务器地址
 email_server_port = 25 #发送邮件的服务器端口
 sender_email = 'xxx@qq.com' #发送邮件的账号
+sender_passwd = '' #发送者密码
 reciever_email = 'xxx@qq.com' #接收邮件的账号
 
 jijinListTotal = [] #存放基金总表
@@ -40,27 +41,27 @@ jijinListSelected = [] #存放要选择的基金
 
 #-----------------------------------------------------------------------------------------
 def DaochuShujuThread(obj, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever, jijinListTotal, jijinListSelected):
     Daochu_shuju(year, month, day)
     obj.s.step5.emit()
 
 def ZhizuoPingzhengThread(obj, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     Zhizuo_pingzheng(year, month, day)
     obj.s.step6.emit()
 
 def ShengchengGuzhibiaoThread(obj, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     Shengcheng_guzhibiao(year, month, day)
     obj.s.step7.emit()
 
 def Guanli_DianziduizhangThread(obj, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     Guanli_dianziduizhang(year, month, day)
     obj.s.step10.emit()
 
 def Daochu_ZichanbaobiaoThread(obj, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     Daochu_zichanbaobiao(year, month, day)
 
 #-----------------------------------------------------------------------------------------
@@ -360,7 +361,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         QApplication.processEvents()
         print('s4')
         threading.Thread(target=DaochuShujuThread, args=(self, year, month, day, blacklist, email_server_url, 
-            email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected)).start()
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Daochu_shuju, args=(year, month, day), callback=lambda x: self.s.step5.emit())
         #pool.close()
@@ -385,7 +386,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step5Label.setPixmap(pix)
         QApplication.processEvents()
         threading.Thread(target=ZhizuoPingzhengThread, args=(self, year, month, day, blacklist, email_server_url, 
-            email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected))).start()
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected))).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Zhizuo_pingzheng, args=(year, month, day), callback=lambda x: self.s.step6.emit())
         #pool.close()
@@ -410,7 +411,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step6Label.setPixmap(pix)
         QApplication.processEvents()
         threading.Thread(target=ShengchengGuzhibiaoThread, args=(self, year, month, day, blacklist, email_server_url, 
-            email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected))).start()
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected))).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Shengcheng_guzhibiao, args=(year, month, day), callback=lambda x: self.s.step7.emit())
         #pool.close()
@@ -501,7 +502,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
         threading.Thread(target=Guanli_DianziduizhangThread, args=(self, year, month, day, blacklist, email_server_url, 
-            email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected))).start()
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected))).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
         #pool.close()
@@ -526,7 +527,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
         threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(self, year, month, day, blacklist, email_server_url, 
-            email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected))).start()
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected))).start()
         #pool = Pool(processes=1)
         #self.pool.apply_async(func=Daochu_zichanbaobiao, args=(year, month, day))
         #pool.close()
