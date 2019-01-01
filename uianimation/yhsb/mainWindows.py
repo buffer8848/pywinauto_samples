@@ -4,6 +4,7 @@ import os
 import time
 import sys
 import multiprocessing
+import threading
 from windowsmomo import *
 from data_import import Daochu_shuju
 from make_pingzheng import Zhizuo_pingzheng
@@ -25,6 +26,26 @@ lock = Lock()
 year = str(datetime.datetime.now().year)
 month = str(datetime.datetime.now().month)
 day = str(datetime.datetime.now().day)
+
+#-----------------------------------------------------------------------------------------
+def DaochuShujuThread(obj, year, month, day):
+    Daochu_shuju(year, month, day)
+    obj.s.step5.emit()
+
+def ZhizuoPingzhengThread(obj, year, month, day):
+    Zhizuo_pingzheng(year, month, day)
+    obj.s.step6.emit()
+
+def ShengchengGuzhibiaoThread(obj, year, month, day):
+    Shengcheng_guzhibiao(year, month, day)
+    obj.s.step7.emit()
+
+def Guanli_DianziduizhangThread(obj, year, month, day):
+    Guanli_dianziduizhang(year, month, day)
+    obj.s.step10.emit()
+
+def Daochu_ZichanbaobiaoThread(obj, year, month, day):
+    Daochu_zichanbaobiao(year, month, day)
 
 class Communicate(QObject):
     step1 = pyqtSignal()
@@ -50,7 +71,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.startUp()
 
     def startUp(self):
-        self.pool = Pool(processes=None)
         self.s = Communicate()
         self.startButton.clicked.connect(self.on_click)
         self.PauseButton.clicked.connect(self.pause_click)
@@ -322,7 +342,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step4Label.setPixmap(pix)
         QApplication.processEvents()
         print('s4')
-        self.pool.apply_async(func=Daochu_shuju, args=(year, month, day), callback=lambda x: self.s.step5.emit())
+        threading.Thread(target=DaochuShujuThread, args=(self, year, month, day)).start()
+        #pool = Pool(processes=1)
+        #pool.apply_async(func=Daochu_shuju, args=(year, month, day), callback=lambda x: self.s.step5.emit())
+        #pool.close()
 
     def step5Changed(self):
         frame = QImage('image/loadL.png')
@@ -343,7 +366,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step5Label.setPixmap(pix)
         QApplication.processEvents()
-        self.pool.apply_async(func=Zhizuo_pingzheng, args=(year, month, day), callback=lambda x: self.s.step6.emit())
+        threading.Thread(target=ZhizuoPingzhengThread, args=(self, year, month, day)).start()
+        #pool = Pool(processes=1)
+        #pool.apply_async(func=Zhizuo_pingzheng, args=(year, month, day), callback=lambda x: self.s.step6.emit())
+        #pool.close()
 
     def step6Changed(self):
         frame = QImage('image/makeKeyL.png')
@@ -364,7 +390,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step6Label.setPixmap(pix)
         QApplication.processEvents()
-        self.pool.apply_async(func=Shengcheng_guzhibiao, args=(year, month, day), callback=lambda x: self.s.step7.emit())
+        threading.Thread(target=ShengchengGuzhibiaoThread, args=(self, year, month, day)).start()
+        #pool = Pool(processes=1)
+        #pool.apply_async(func=Shengcheng_guzhibiao, args=(year, month, day), callback=lambda x: self.s.step7.emit())
+        #pool.close()
 
     def step7Changed(self):
         frame = QImage('image/productL.png')
@@ -451,7 +480,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
-        self.pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
+        threading.Thread(target=Guanli_DianziduizhangThread, args=(self, year, month, day)).start()
+        #pool = Pool(processes=1)
+        #pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
+        #pool.close()
 
     def step10Changed(self):
         frame = QImage('image/mngL.png')
@@ -472,7 +504,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
-        self.pool.apply_async(func=Daochu_zichanbaobiao, args=(year, month, day))
+        threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(self, year, month, day)).start()
+        #pool = Pool(processes=1)
+        #self.pool.apply_async(func=Daochu_zichanbaobiao, args=(year, month, day))
+        #pool.close()
 
     def step11Changed(self):
         frame = QImage('image/sendL.png')
