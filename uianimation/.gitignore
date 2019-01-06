@@ -1,0 +1,7 @@
+﻿# .gitignore
+.idea
+__pycache__
+*.pyc
+*.spec
+pylint
+uianimation/yhsb/venv/Scripts/
