@@ -1,7 +1,10 @@
 ﻿# .gitignore
 .idea
+.vscode
 __pycache__
 *.pyc
 *.spec
 pylint
 uianimation/yhsb/venv/Scripts/
+yhsb/venv/Scripts/*
+yhsb/venv/
