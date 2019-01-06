@@ -6,24 +6,23 @@
 # desc: 生成估值表
 #--------------------------------------------------------------------------------------------------
 
-from pywinauto.application import Application
-from pywinauto.keyboard import SendKeys
-from pywinauto import timings
-from time import sleep
 
-from common import *
-from login import process_app_login
+def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    from pywinauto.application import Application
+    from pywinauto.keyboard import SendKeys
+    from pywinauto import timings
+    from time import sleep
+    from common import restart_if_app_exist,verify_control_exception, send_email_to_admin
+    from login import process_app_login
 
-def Shengcheng_guzhibiao(year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
-    exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
-    restart_if_app_exist(exepath)
+    # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
+    restart_if_app_exist(gzPath)
     sleep(3)
 
-    app = Application().start(exepath)
+    app = Application().start(gzPath)
 
     #处理登录
-    process_app_login(app)
+    process_app_login(app, gzName, gzPW)
     sleep(1)
 
     #打开数据管理

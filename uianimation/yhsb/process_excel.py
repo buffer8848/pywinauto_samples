@@ -6,10 +6,10 @@
 # desc: 处理excel表
 
 #--------------------------------------------------------------------------------------------------
-import xlrd
-import openpyxl
 
 def Merge_excels(heduijingzhi_excel, toucun_excel, zichan_excel, outputexcel):
+    import xlrd
+    import openpyxl
     #先打开核对净值总表
     hedui_data = openpyxl.load_workbook(heduijingzhi_excel)
 

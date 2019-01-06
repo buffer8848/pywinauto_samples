@@ -6,25 +6,25 @@
 # desc: 报表导出操作
 
 #--------------------------------------------------------------------------------------------------
-from pywinauto.application import Application
-from pywinauto.keyboard import SendKeys
-from pywinauto import mouse
-from pywinauto import timings
-from time import sleep
 
-from common import *
-from login import process_app_login
+def Daochu_toucunbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    from pywinauto.application import Application
+    from pywinauto.keyboard import SendKeys
+    from pywinauto import mouse
+    from pywinauto import timings
+    from time import sleep
 
-def Daochu_toucunbaobiao(year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
-    exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssReport.exe"
-    restart_if_app_exist(exepath)
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin
+    from login import process_app_login
+
+    # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssReport.exe"
+    restart_if_app_exist(gzPath)
     sleep(3)
 
-    app = Application(backend="win32").start(exepath)
+    app = Application(backend="win32").start(gzPath)
 
     #处理登录
-    process_app_login(app)
+    process_app_login(app, gzName, gzPW)
     sleep(1)
 
     #---------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ def Daochu_toucunbaobiao(year, month, day, blacklist, email_server_url,
     #输出excel
     dlg_outxls = app["输出EXCEL"]
     dlg_outxls.set_focus()
-    dlg_outxls.Edit2.set_text(r"C:\tool\buffer\data")
+    dlg_outxls.Edit2.set_text(filePath)
     dlg_outxls.Edit3.set_text(r"对帐结果管理.xls")
     dlg_outxls["确 定"].click()
     sleep(2)

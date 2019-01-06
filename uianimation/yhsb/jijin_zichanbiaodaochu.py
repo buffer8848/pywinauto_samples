@@ -6,15 +6,15 @@
 # desc: 基金资产表导出
 
 #--------------------------------------------------------------------------------------------------
-from pywinauto.application import Application
-from time import sleep
-from pywinauto.keyboard import send_keys
-from pywinauto import mouse
-from pywinauto import timings
-
-from common import restart_if_app_exist
 
 def Daochu_jijinzichan():
+    from pywinauto.application import Application
+    from pywinauto.keyboard import SendKeys
+    from pywinauto import timings
+    from time import sleep
+    from pywinauto import mouse
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin
+    from login import process_app_login
     exepath = r"F:\O32测试环境\trade\trade.exe"
     restart_if_app_exist(exepath)
     sleep(3)
@@ -66,7 +66,7 @@ def Daochu_jijinzichan():
     mouse.click(coords=(324,118)) #TODO
     sleep(3)
     mouse.click(coords=(137,89)) #TODO
-    send_keys("2")
+    SendKeys("2")
     sleep(2)
     mouse.click(coords=(142,109)) #TODO
     #dlg_main["THsEdit"].set_text("-1  所有基金")

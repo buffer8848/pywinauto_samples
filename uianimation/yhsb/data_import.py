@@ -6,25 +6,22 @@
 # desc: 针对某基金软件进行模拟操作
 
 #--------------------------------------------------------------------------------------------------
-from pywinauto.application import Application
-from pywinauto.keyboard import SendKeys
-from pywinauto import mouse
-from pywinauto import timings
-from time import sleep
-#import pytesseract
-#import pyautogui as auto
-from common import *
-from login import process_app_login
-#import getContent as gd
 
-def Daochu_shuju(year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, reciever_email, jijinListTotal, jijinListSelected):
-    exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
-    restart_if_app_exist(exepath)
+
+def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    from pywinauto.application import Application
+    from pywinauto.keyboard import SendKeys
+    from pywinauto import mouse
+    from pywinauto import timings
+    from time import sleep
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, get_position_of_jijin_list
+    from login import process_app_login
+    # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
+    restart_if_app_exist(gzPath)
     sleep(3)
-    app = Application(backend="win32").start(exepath)
+    app = Application(backend="win32").start(gzPath)
 
-    process_app_login(app)
+    process_app_login(app, gzName, gzPW)
     sleep(3)
 
     #打开数据管理
@@ -45,7 +42,7 @@ def Daochu_shuju(year, month, day, blacklist, email_server_url,
     sleep(2)
 
     #输入文件路径
-    dlg_main["按时间段读取Edit2"].set_text(r'C:\估值相关测试数据\QS\QS101\\'+year+month+day)
+    dlg_main["按时间段读取Edit2"].set_text(filePath + '\\'+year+month+day)
 
     #进入到数据管理页面
     ctl_treedview = dlg_main["TreeView20WndClass"]
@@ -69,7 +66,7 @@ def Daochu_shuju(year, month, day, blacklist, email_server_url,
     sleep(1)
     while True: #等待保存成功后的弹窗
         try:
-            if verify_control_exception(app.top_window(), []):
+            if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
                 sleep(300)
             try:
