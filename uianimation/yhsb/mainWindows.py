@@ -836,13 +836,14 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         bl = self.SblackList.toPlainText()
         blacklist = bl.split('、')
 
-        if dataPath == '' or filePath == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '' :
+        if dataPath == '' or filePath == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or \
+                cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '' :
             self.dialog()
         else:
-            data = pd.read_excel(dataPath)
-            data = pd.DataFrame(data)
-            jijinListTotal = list(data['基金'])
-            jijinListSelected = list(data['可选基金'])
+            #data = pd.read_excel(dataPath)
+            #data = pd.DataFrame(data)
+            #jijinListTotal = list(data['基金'])
+            #jijinListSelected = list(data['可选基金'])
             self.closeFun()
 
     def dialog(self):
