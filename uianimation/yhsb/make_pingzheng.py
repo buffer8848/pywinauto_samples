@@ -7,21 +7,23 @@
 
 #--------------------------------------------------------------------------------------------------
 
-def Zhizuo_pingzheng(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+def Zhizuo_pingzheng(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+                     year, month, day, blacklist, email_server_url, email_server_port, sender_email,
+                     sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import SendKeys
+    from pywinauto.keyboard import send_keys
     from pywinauto import timings
     from time import sleep
     from common import restart_if_app_exist, verify_control_exception, send_email_to_admin
     from login import process_app_login
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
-    restart_if_app_exist(gzPath, gzName, gzPW)
+    restart_if_app_exist(gzPath)
     sleep(3)
 
-    app = Application().start(gzPath)
+    app = Application(backend="win32").start(gzPath)
 
     #处理登录
-    process_app_login(app)
+    process_app_login(app, gzName, gzPW)
     sleep(1)
 
     #打开数据管理
@@ -32,11 +34,11 @@ def Zhizuo_pingzheng(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cw
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    SendKeys(year)
-    SendKeys("{RIGHT}")
-    SendKeys(month)
-    SendKeys("{RIGHT}")
-    SendKeys(day)
+    send_keys(year)
+    send_keys("{RIGHT}")
+    send_keys(month)
+    send_keys("{RIGHT}")
+    send_keys(day)
     sleep(2)
 
     #进入到数据管理页面
@@ -49,8 +51,9 @@ def Zhizuo_pingzheng(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cw
     status = True
     while status: #判断各种异常的弹框，都点yes
         try:
-            if verify_control_exception(app.top_window(), []):
-                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+            if verify_control_exception(app.top_window(), blacklist):
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email)
                 sleep(300)
             try:
                 if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():

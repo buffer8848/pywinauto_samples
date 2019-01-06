@@ -10,7 +10,7 @@
 
 def Guanli_dianziduizhang(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import SendKeys
+    from pywinauto.keyboard import send_keys
     from pywinauto import timings
     from time import sleep
 
@@ -39,14 +39,15 @@ def Guanli_dianziduizhang(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwNam
     sleep(1)
     dlg_main["查询"].set_focus()
     dlg_main["查询"].click()
+    sleep(1)
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    SendKeys(year)
-    SendKeys("{RIGHT}")
-    SendKeys(month)
-    SendKeys("{RIGHT}")
-    SendKeys(day)
+    send_keys(year)
+    send_keys("{RIGHT}")
+    send_keys(month)
+    send_keys("{RIGHT}")
+    send_keys(day)
     sleep(2)
 
     #点击右键菜单
@@ -54,11 +55,11 @@ def Guanli_dianziduizhang(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwNam
     dlg_main["数据管理"].ThunderRT6UserControlDC.click(button=u'right', coords=(300,300))
     #选择菜单
     #app.menu_select["报表输出 -> 输出为Excel文件"]
-    SendKeys("{DOWN 6}")
+    send_keys("{DOWN 6}")
     sleep(2)
-    SendKeys("{RIGHT}")
+    send_keys("{RIGHT}")
     sleep(2)
-    SendKeys("{ENTER}")
+    send_keys("{ENTER}")
 
     #输出excel
     dlg_outxls = app["输出EXCEL"]
@@ -72,8 +73,9 @@ def Guanli_dianziduizhang(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwNam
 
     while True: #等待保存成功后的弹窗
         try:
-            if verify_control_exception(app.top_window(), []):
-                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+            if verify_control_exception(app.top_window(), blacklist):
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email)
                 sleep(300)
                 
             try:

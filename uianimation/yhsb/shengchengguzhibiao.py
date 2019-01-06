@@ -7,9 +7,11 @@
 #--------------------------------------------------------------------------------------------------
 
 
-def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+                         year, month, day, blacklist, email_server_url, email_server_port, sender_email,
+                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import SendKeys
+    from pywinauto.keyboard import send_keys
     from pywinauto import timings
     from time import sleep
     from common import restart_if_app_exist,verify_control_exception, send_email_to_admin
@@ -33,11 +35,11 @@ def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    SendKeys(year)
-    SendKeys("{RIGHT}")
-    SendKeys(month)
-    SendKeys("{RIGHT}")
-    SendKeys(day)
+    send_keys(year)
+    send_keys("{RIGHT}")
+    send_keys(month)
+    send_keys("{RIGHT}")
+    send_keys(day)
     sleep(2)
 
     #勾选生成估值余额对账数据
@@ -55,8 +57,10 @@ def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     while status: #判断各种异常的弹框，都点确定
         #app.top_window().set_focus()
         try:
-            if verify_control_exception(app.top_window(), []):
-                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+
+            if verify_control_exception(app.top_window(), blacklist):
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email)
                 sleep(300)
 
             fuck = app.top_window()["确定"]
@@ -65,7 +69,8 @@ def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
                 app["基金资产估值表Dialog"]["确定"].click()
                 status = False
             else:
-                fuck.click()
+                send_keys("{ENTER}")
+                #fuck.click()
                 sleep(1)
         except Exception:
             None

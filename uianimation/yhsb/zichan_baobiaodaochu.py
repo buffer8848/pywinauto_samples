@@ -7,9 +7,11 @@
 
 #--------------------------------------------------------------------------------------------------
 
-def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+                         year, month, day, blacklist, email_server_url, email_server_port, sender_email,
+                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import SendKeys
+    from pywinauto.keyboard import send_keys
     from pywinauto import mouse
     from pywinauto import timings
     from time import sleep
@@ -40,12 +42,12 @@ def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    SendKeys(year)
-    SendKeys("{RIGHT}")
-    SendKeys(month)
-    SendKeys("{RIGHT}")
-    SendKeys(day)
-    SendKeys("{ENTER}")
+    send_keys(year)
+    send_keys("{RIGHT}")
+    send_keys(month)
+    send_keys("{RIGHT}")
+    send_keys(day)
+    send_keys("{ENTER}")
     sleep(2)
 
     #点击基金浏览
@@ -62,8 +64,9 @@ def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
 
     while True: #等待保存成功后的弹窗
         try:
-            if verify_control_exception(app.top_window(), []):
-                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+            if verify_control_exception(app.top_window(), blacklist):
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email)
                 sleep(300)
 
             try:

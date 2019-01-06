@@ -34,7 +34,7 @@ email_server_url = "smtp.qq.com" #发送邮件的服务器地址
 email_server_port = 25 #发送邮件的服务器端口
 sender_email = 'xxx@qq.com' #发送邮件的账号
 sender_passwd = '' #发送者密码
-reciever_email = 'xxx@qq.com' #接收邮件的账号
+reciever_email_email = 'xxx@qq.com' #接收邮件的账号
 
 jijinListTotal = [] #存放基金总表
 jijinListSelected = [] #存放要选择的基金
@@ -54,24 +54,44 @@ o32PW = ''
 
 
 #-----------------------------------------------------------------------------------------
-def DaochuShujuThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever, jijinListTotal, jijinListSelected):
-    Daochu_shuju(year, month, day)
+def DaochuShujuThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    Daochu_shuju(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
     obj.s.step5.emit()
 
-def ZhizuoPingzhengThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever, jijinListTotal, jijinListSelected):
-    Zhizuo_pingzheng(year, month, day)
+def ZhizuoPingzhengThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    Zhizuo_pingzheng(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
     obj.s.step6.emit()
 
-def ShengchengGuzhibiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever, jijinListTotal, jijinListSelected):
-    Shengcheng_guzhibiao(year, month, day)
+def ShengchengGuzhibiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    Shengcheng_guzhibiao(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
     obj.s.step7.emit()
 
-def Guanli_DianziduizhangThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever, jijinListTotal, jijinListSelected):
-    Guanli_dianziduizhang(year, month, day)
+def Guanli_DianziduizhangThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    Guanli_dianziduizhang(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
     obj.s.step10.emit()
 
-def Daochu_ZichanbaobiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever, jijinListTotal, jijinListSelected):
-    Daochu_zichanbaobiao(year, month, day)
+def Daochu_ZichanbaobiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    Daochu_zichanbaobiao(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
 
 class MyThread(threading.Thread):
     def __init__(self, func, args=()):
@@ -465,7 +485,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step4Label.setPixmap(pix)
         QApplication.processEvents()
         print('s4')
-        threading.Thread(target=DaochuShujuThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)).start()
+        threading.Thread(target=DaochuShujuThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Daochu_shuju, args=(year, month, day), callback=lambda x: self.s.step5.emit())
         #pool.close()
@@ -489,7 +509,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step5Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)).start()
+        threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Zhizuo_pingzheng, args=(year, month, day), callback=lambda x: self.s.step6.emit())
         #pool.close()
@@ -513,7 +533,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step6Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=ShengchengGuzhibiaoThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)).start()
+        threading.Thread(target=ShengchengGuzhibiaoThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Shengcheng_guzhibiao, args=(year, month, day), callback=lambda x: self.s.step7.emit())
         #pool.close()
@@ -603,7 +623,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=Guanli_DianziduizhangThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)).start()
+        threading.Thread(target=Guanli_DianziduizhangThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
         #pool.close()
@@ -628,7 +648,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
         threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(self, dataPath, filePath, year, month, day, blacklist, email_server_url,
-            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)).start()
+            email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
         #pool = Pool(processes=1)
         #self.pool.apply_async(func=Daochu_zichanbaobiao, args=(year, month, day))
         #pool.close()
@@ -757,7 +777,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         global email_server_port
         global sender_email
         global sender_passwd
-        global reciever_email
+        global reciever_email_email
 
         global dataPath
         global filePath
@@ -799,7 +819,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         email_server_port = self.SserverPort.text()  # 发送邮件的服务器端口
         sender_email = self.SsendID.text()  # 发送邮件的账号
         sender_passwd = self.SsendPW.text()  # 发送者密码
-        reciever_email = self.SrsvID.text()  # 接收邮件的账号
+        reciever_email_email = self.SrsvID.text()  # 接收邮件的账号
 
         dataPath = self.SfilePath.text()
         filePath = self.SdicPath.text()

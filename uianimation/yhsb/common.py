@@ -49,7 +49,7 @@ def capture_current_screen():
     None
 
 #发送邮件通知到指定的帐户
-def send_email_to_admin(message, server, port, sender, reciever):
+def send_email_to_admin(message, server, port, sender, pwd, reciever):
     import smtplib
     from email.mime.text import MIMEText
     from email.header import Header
@@ -62,12 +62,9 @@ def send_email_to_admin(message, server, port, sender, reciever):
     message['Subject'] = Header(subject, 'utf-8')
     
     smtpObj = smtplib.SMTP(server, port)
-    smtpObj.login('179770346@qq.com','cbkjnrbsvahjcaee')
+    smtpObj.login(sender, pwd)
     try:
         smtpObj.sendmail(sender, reciever, message.as_string())
     except smtplib.SMTPException:
         print("Error: 无法发送邮件")
     smtpObj.quit()
-
-if __name__ == "__main__":
-    send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")

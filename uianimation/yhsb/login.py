@@ -13,7 +13,10 @@ def process_app_login(app, gzName, gzPW):
     #处理登录
     dlg_login = app["估值系统登录"]
     dlg_login.set_focus()
+    dlg_login["Edit2"].set_focus()
     dlg_login["Edit2"].set_text(gzName)
+    dlg_login["Edit2"].set_focus() #选中一下才能登陆
+    dlg_login["Edit3"].set_focus()
     dlg_login["Edit3"].set_text(gzPW)
     dlg_login["登录(&L)"].click()
     sleep(1)
