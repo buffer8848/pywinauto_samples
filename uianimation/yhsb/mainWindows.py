@@ -13,6 +13,7 @@ from make_pingzheng import Zhizuo_pingzheng
 from shengchengguzhibiao import Shengcheng_guzhibiao
 from dianziduizhangguanli import Guanli_dianziduizhang
 from toucun_baobiaodaochu import Daochu_toucunbaobiao
+from jijin_zichanbiaodaochu import Daochu_jijinzichan
 from zichan_baobiaodaochu import Daochu_zichanbaobiao
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QDialog, QFileDialog, QMenu, QAction
@@ -91,6 +92,17 @@ def Daochu_ZichanbaobiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cw
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     Daochu_zichanbaobiao(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+    obj.s.step11.emit()
+
+def Daochu_jijin_toucun_baobiao_Thread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    Daochu_toucunbaobiao(dataPath, filePath, cwPath, gzName, gzPW, cwPath, cwName, cwPW,
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+    Daochu_jijinzichan(dataPath, filePath, cwPath, gzName, gzPW, cwPath, cwName, cwPW,
+        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
         email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
 
 class MyThread(threading.Thread):
@@ -623,7 +635,12 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=Guanli_DianziduizhangThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
+        threading.Thread(target=Guanli_DianziduizhangThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW,
+                                                                   cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+                                                                   year, month, day, blacklist, email_server_url,
+                                                                   email_server_port, sender_email, sender_passwd,
+                                                                   reciever_email_email, jijinListTotal,
+                                                                   jijinListSelected)).start()
         #pool = Pool(processes=1)
         #pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
         #pool.close()
@@ -672,6 +689,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step11Label.setPixmap(pix)
         QApplication.processEvents()
+        threading.Thread(target=Daochu_jijin_toucun_baobiao_Thread,
+                         args=(self, dataPath, filePath, year, month, day, blacklist, email_server_url,
+                               email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal,
+                               jijinListSelected)).start()
         time.sleep(2)
         self.s.wait3.emit()
 
@@ -837,13 +858,13 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         blacklist = bl.split('、')
 
         if dataPath == '' or filePath == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or \
-                cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '' :
+                cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '':
             self.dialog()
         else:
-            #data = pd.read_excel(dataPath)
-            #data = pd.DataFrame(data)
-            #jijinListTotal = list(data['基金'])
-            #jijinListSelected = list(data['可选基金'])
+            data = pd.read_excel(dataPath)
+            data = pd.DataFrame(data)
+            jijinListTotal = list(data['基金'])
+            jijinListSelected = list(data['可选基金'])
             self.closeFun()
 
     def dialog(self):
