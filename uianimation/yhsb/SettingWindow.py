@@ -208,7 +208,7 @@ class Ui_SettingWindows(object):
         self.label_5.setText(_translate("SettingWindows", "数据读取路径："))
         self.SgetCw.setText(_translate("SettingWindows", "选择系统"))
         self.SgetFile.setText(_translate("SettingWindows", "选择文件"))
-        self.label_3.setText(_translate("SettingWindows", "财务系统："))
+        self.label_3.setText(_translate("SettingWindows", "报表系统："))
         self.SgetO32.setText(_translate("SettingWindows", "选择系统"))
         self.label_4.setText(_translate("SettingWindows", "O32："))
         self.SgetGz.setText(_translate("SettingWindows", "选择系统"))

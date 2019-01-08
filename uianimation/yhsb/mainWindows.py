@@ -35,7 +35,7 @@ email_server_url = "smtp.qq.com" #发送邮件的服务器地址
 email_server_port = 25 #发送邮件的服务器端口
 sender_email = 'xxx@qq.com' #发送邮件的账号
 sender_passwd = '' #发送者密码
-reciever_email_email = 'xxx@qq.com' #接收邮件的账号
+reciever_email = 'xxx@qq.com' #接收邮件的账号
 
 jijinListTotal = [] #存放基金总表
 jijinListSelected = [] #存放要选择的基金
@@ -52,11 +52,108 @@ o32Path = ''
 o32Name = ''
 o32PW = ''
 
+flag = 0
+dictC = {}
 
+confName = ''
 
-#-----------------------------------------------------------------------------------------
-def DaochuShujuThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
-    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
+def getConf():
+    readconf = open('conf.txt', 'r', encoding='gbk')
+    global dictC
+    global flag
+    for i in readconf.readlines():
+        if '：' in i and '*' not in i:
+            listC = i[:-1].split('：')
+            if listC[0] =='填写人' and listC[1] == '':
+                print('不用填写了！！！！！')
+                flag = 0
+                print(flag, dictC)
+                return flag, dictC
+            flag = 1
+            dictC[listC[0]] = listC[1]
+    readconf.close()
+    print(flag, dictC)
+    return flag, dictC
+
+def setValue():
+    flag, dictC = getConf()
+    global confName
+
+    global email_server_url
+    global email_server_port
+    global sender_email
+    global sender_passwd
+    global reciever_email
+
+    global dataPath
+    global filePath
+    global gzPath
+    global gzName
+    global gzPW
+    global cwPath
+    global cwName
+    global cwPW
+    global o32Path
+    global o32Name
+    global o32PW
+
+    global year
+    global month
+    global day
+
+    global blacklist
+    global jijinListTotal
+    global jijinListSelected
+
+    if flag == 1:
+        dataPath = dictC['基金列表存放路径']
+        filePath = dictC['导出文件目录']
+
+        gzPath = dictC['估值系统路径']
+        gzName = dictC['估值账户']
+        gzPW = dictC['估值密码']
+        cwPath = dictC['财务系统路径']
+        cwName = dictC['财务账户']
+        cwPW = dictC['财务密码']
+        o32Path = dictC['O32系统路径']
+        o32Name = dictC['O32账户']
+        o32PW = dictC['O32密码']
+
+        confName = dictC['填写人']
+
+        t1 = dictC['T - 1 日']
+        tany = dictC['自定义']
+
+        if t1 == '1':
+            day = str(int(day) - 1)
+        elif tany == '1':
+            t = dictC['自定义日期']
+            datelist = t.split('/')
+            year = str(datelist[0])
+            month = str(datelist[1])
+            day = str(datelist[2])
+
+        email_server_url = dictC['发送邮件的服务器地址']
+        email_server_port = dictC['发送邮件的服务器端口']
+        sender_email = dictC['发送者邮箱账号']
+        sender_passwd = dictC['发送者邮箱密码']
+        reciever_email = dictC['接受者邮箱账号']
+
+        bl = dictC['黑名单']
+        blacklist = bl.split('、')
+
+        if dataPath != '':
+            data = pd.read_excel(dataPath)
+            data = pd.DataFrame(data)
+            jijinListTotal = list(data['基金'])
+            jijinListSelected = list(data['可选基金'])
+
+        return flag
+    else:
+        return flag
+
+def DaochuShujuThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+    o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     Daochu_shuju(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
@@ -146,7 +243,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.quit.clicked.connect(self.closeFun)
         self.startButton.clicked.connect(self.on_click)
         self.PauseButton.clicked.connect(self.pause_click)
-        self.quitButton.clicked.connect(self.pause_click)
+        self.quitButton.clicked.connect(self.quit_click)
         self.step2Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.step2Label.customContextMenuRequested.connect(self.custom_right_menu_step2)
         self.step4Label.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -186,6 +283,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.s.waittmp.connect(self.waitTmpChanged)
 
     def on_click(self):
+        setValue()
         if dataPath == '' or filePath == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '' :
             self.dialog()
         else:
@@ -203,8 +301,28 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             else:
                 self.s.step1.emit()
 
+    def pause(self):
+        self.__flag.clear()  # 设置为False, 让线程阻塞
+
+    def resume(self):
+        self.__flag.set()  # 设置为True, 让线程停止阻塞
+
+    def stop(self):
+        self.__flag.set()  # 将线程从暂停状态恢复, 如何已经暂停的话
+        self.__running.clear()  # 设置为False
+
     def pause_click(self):
-        os.system("pause")
+        if self.PauseButton.text() == '暂停':
+            self.PauseButton.setText('继续')
+            QApplication.processEvents()
+            self.pause()
+        elif self.PauseButton.text() == '继续':
+            self.PauseButton.setText('暂停')
+            QApplication.processEvents()
+            self.resume()
+
+    def quit_click(self):
+        self.stop()
 
     def minFun(self):
         self.showMinimized()
@@ -240,9 +358,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
 
     def custom_right_menu_step4(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("重做")
+        opt1 = menu.addAction("单步重做")
         opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("设置使用时间")
+        opt3 = menu.addAction("继续执行")
         action = menu.exec_(self.step4Label.mapToGlobal(pos))
         if action == opt1:
             self.step4Changed()
@@ -262,9 +380,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
 
     def custom_right_menu_step5(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("重做")
+        opt1 = menu.addAction("单步重做")
         opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("设置使用时间")
+        opt3 = menu.addAction("继续执行")
         action = menu.exec_(self.step5Label.mapToGlobal(pos))
         if action == opt1:
             self.step5Changed()
@@ -284,9 +402,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
 
     def custom_right_menu_step6(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("重做")
+        opt1 = menu.addAction("单步重做")
         opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("设置使用时间")
+        opt3 = menu.addAction("继续执行")
         action = menu.exec_(self.step6Label.mapToGlobal(pos))
         if action == opt1:
             self.step6Changed()
@@ -306,9 +424,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
 
     def custom_right_menu_step9(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("重做")
+        opt1 = menu.addAction("单步重做")
         opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("设置使用时间")
+        opt3 = menu.addAction("继续执行")
         action = menu.exec_(self.step9Label.mapToGlobal(pos))
         if action == opt1:
             self.step9Changed()
@@ -328,9 +446,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
 
     def custom_right_menu_step10(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("重做")
+        opt1 = menu.addAction("单步重做")
         opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("设置使用时间")
+        opt3 = menu.addAction("继续执行")
         action = menu.exec_(self.step10Label.mapToGlobal(pos))
         if action == opt1:
             self.step10Changed()
@@ -497,10 +615,11 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step4Label.setPixmap(pix)
         QApplication.processEvents()
         print('s4')
-        threading.Thread(target=DaochuShujuThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
-        #pool = Pool(processes=1)
-        #pool.apply_async(func=Daochu_shuju, args=(year, month, day), callback=lambda x: self.s.step5.emit())
-        #pool.close()
+        time.sleep(2)
+        threading.Thread(target=DaochuShujuThread, args=(
+        self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
+        blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
+        jijinListSelected)).start()
 
     def step5Changed(self):
         frame = QImage('image/loadL.png')
@@ -521,10 +640,11 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step5Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
-        #pool = Pool(processes=1)
-        #pool.apply_async(func=Zhizuo_pingzheng, args=(year, month, day), callback=lambda x: self.s.step6.emit())
-        #pool.close()
+        print('s5')
+        time.sleep(2)
+        threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
+        blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+        jijinListTotal, jijinListSelected)).start()
 
     def step6Changed(self):
         frame = QImage('image/makeKeyL.png')
@@ -545,10 +665,13 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step6Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=ShengchengGuzhibiaoThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
-        #pool = Pool(processes=1)
-        #pool.apply_async(func=Shengcheng_guzhibiao, args=(year, month, day), callback=lambda x: self.s.step7.emit())
-        #pool.close()
+        print('s6')
+        time.sleep(2)
+        threading.Thread(target=ShengchengGuzhibiaoThread, args=(
+            self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
+            day,
+            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
+            jijinListSelected)).start()
 
     def step7Changed(self):
         frame = QImage('image/productL.png')
@@ -569,6 +692,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step7Label.setPixmap(pix)
         QApplication.processEvents()
+        print('s7')
         time.sleep(2)
         self.s.wait2.emit()
 
@@ -591,6 +715,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.arrows7LongLabel.setPixmap(pix)
         QApplication.processEvents()
+        print('w2')
         time.sleep(2)
         self.s.step8.emit()
 
@@ -613,6 +738,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step8Label.setPixmap(pix)
         QApplication.processEvents()
+        print('s8')
         time.sleep(2)
         self.s.step9.emit()
 
@@ -635,15 +761,13 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=Guanli_DianziduizhangThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW,
-                                                                   cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
-                                                                   year, month, day, blacklist, email_server_url,
-                                                                   email_server_port, sender_email, sender_passwd,
-                                                                   reciever_email_email, jijinListTotal,
-                                                                   jijinListSelected)).start()
-        #pool = Pool(processes=1)
-        #pool.apply_async(func=Guanli_dianziduizhang, args=(year, month, day), callback=lambda x: self.s.step10.emit())
-        #pool.close()
+        print('s9')
+        time.sleep(2)
+        threading.Thread(target=Guanli_DianziduizhangThread, args=(
+            self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
+            day,
+            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
+            jijinListSelected)).start()
 
     def step10Changed(self):
         frame = QImage('image/mngL.png')
@@ -664,11 +788,13 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(self, dataPath, filePath, year, month, day, blacklist, email_server_url,
-            email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal, jijinListSelected)).start()
-        #pool = Pool(processes=1)
-        #self.pool.apply_async(func=Daochu_zichanbaobiao, args=(year, month, day))
-        #pool.close()
+        print('s10')
+        time.sleep(2)
+        threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(
+            self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
+            day,
+            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
+            jijinListSelected)).start()
 
     def step11Changed(self):
         frame = QImage('image/sendL.png')
@@ -689,10 +815,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step11Label.setPixmap(pix)
         QApplication.processEvents()
-        threading.Thread(target=Daochu_jijin_toucun_baobiao_Thread,
-                         args=(self, dataPath, filePath, year, month, day, blacklist, email_server_url,
-                               email_server_port, sender_email, sender_passwd, reciever_email_email, jijinListTotal,
-                               jijinListSelected)).start()
+        print('s11')
         time.sleep(2)
         self.s.wait3.emit()
 
@@ -715,6 +838,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.arrows11LongLabel.setPixmap(pix)
         QApplication.processEvents()
+        print('w3')
         time.sleep(2)
         self.s.waittmp.emit()
 
@@ -751,6 +875,36 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
             self.show()
 
     def startUp(self):
+        flag = setValue()
+        if flag == 1:
+            self.SserverIP.setText(email_server_url)
+            self.SserverPort.setText(email_server_port)
+            self.SsendID.setText(sender_email)
+            self.SsendPW.setText(sender_passwd)
+            self.SrsvID.setText(reciever_email)
+
+            self.SfilePath.setText(dataPath)
+            self.SdicPath.setText(filePath)
+            self.Ssystem1.setText(gzPath)
+            self.SgzName.setText(gzName)
+            self.SgzPW.setText(gzPW)
+            self.Ssystem2.setText(cwPath)
+            self.ScwName.setText(cwName)
+            self.ScwPW.setText(cwPW)
+            self.Ssystem3.setText(o32Path)
+            self.So32Name.setText(o32Name)
+            self.So32PW.setText(o32PW)
+
+            self.SblackList.setText('、'.join(blacklist))
+
+            if year == str(datetime.datetime.now().year) and month == str(datetime.datetime.now().month) and day == str(datetime.datetime.now().day):
+                self.Sdate1.setChecked(True)
+            elif year == str(datetime.datetime.now().year) and month == str(datetime.datetime.now().month) and day == str(datetime.datetime.now().day - 1):
+                self.Sdate2.setChecked(True)
+            else:
+                self.Sdate3.setChecked(True)
+                self.SgetDate.setDate(QDate(int(year), int(month), int(day)))
+
         self.Squit.clicked.connect(self.closeFun)
         self.SgetFile.clicked.connect(self.SgetData)
         self.SgetEx.clicked.connect(self.SgetDic)
@@ -798,7 +952,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         global email_server_port
         global sender_email
         global sender_passwd
-        global reciever_email_email
+        global reciever_email
 
         global dataPath
         global filePath
@@ -820,15 +974,19 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         global jijinListTotal
         global jijinListSelected
 
+        tf = 0
         if self.Sdate1.isChecked():
+            tf = 1
             year = str(datetime.datetime.now().year)
             month = str(datetime.datetime.now().month)
             day = str(datetime.datetime.now().day)
         elif self.Sdate2.isChecked():
+            tf = 2
             year = str(datetime.datetime.now().year)
             month = str(datetime.datetime.now().month)
             day = str((datetime.datetime.now().day - 1))
         elif self.Sdate3.isChecked():
+            tf = 3
             datelist = self.SgetDate.text()
             datelist = datelist.split('/')
             year = datelist[0]
@@ -840,7 +998,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         email_server_port = self.SserverPort.text()  # 发送邮件的服务器端口
         sender_email = self.SsendID.text()  # 发送邮件的账号
         sender_passwd = self.SsendPW.text()  # 发送者密码
-        reciever_email_email = self.SrsvID.text()  # 接收邮件的账号
+        reciever_email = self.SrsvID.text()  # 接收邮件的账号
 
         dataPath = self.SfilePath.text()
         filePath = self.SdicPath.text()
@@ -857,15 +1015,49 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         bl = self.SblackList.toPlainText()
         blacklist = bl.split('、')
 
-        if dataPath == '' or filePath == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or \
-                cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '':
+        if dataPath == '' or filePath == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '' :
             self.dialog()
         else:
             data = pd.read_excel(dataPath)
             data = pd.DataFrame(data)
             jijinListTotal = list(data['基金'])
             jijinListSelected = list(data['可选基金'])
-            self.closeFun()
+
+        fw = open('conf.txt', 'w', encoding='gbk')
+        print('run')
+        fwdata = '*----------提示1：填写人一项必填----------*\n*----------提示2：冒号请用中文字符----------*\n*----------提示3：选择制作日期请在选中项后标记“1”，年月日用“/”隔开，结尾不加标点----------*\n*----------提示4：黑名单请用中文字符的顿号隔开，名词间无需换行，结尾不加标点----------*\n\n\n'
+        fwdata = fwdata + '填写人：' + confName + '\n\n'
+        print(confName)
+        fwdata = fwdata + '基金列表存放路径：' + dataPath + '\n'
+        fwdata = fwdata + '导出文件目录：' + filePath + '\n\n'
+        fwdata = fwdata + '估值系统路径：' + gzPath + '\n'
+        fwdata = fwdata + '估值账户：' + gzName + '\n'
+        fwdata = fwdata + '估值密码：' + gzPW + '\n'
+        fwdata = fwdata + '财务系统路径：' + cwPath + '\n'
+        fwdata = fwdata + '财务账户：' + cwName + '\n'
+        fwdata = fwdata + '财务密码：' + cwPW + '\n'
+        fwdata = fwdata + 'O32系统路径：' + o32Path + '\n'
+        fwdata = fwdata + 'O32账户：' + o32Name + '\n'
+        fwdata = fwdata + 'O32密码：' + o32PW + '\n\n'
+        if tf == 1:
+            fwdata = fwdata + 'T 日：1\nT - 1 日：\n自定义：\n自定义日期：\n\n'
+        elif tf == 2:
+            fwdata = fwdata + 'T 日：\nT - 1 日：1\n自定义：\n自定义日期：\n\n'
+        elif tf == 3:
+            fwdata = fwdata + 'T 日：\nT - 1 日：\n自定义：1\n'
+            fwdata = fwdata + '自定义日期：' + year + '/' + month + '/' + day + '\n\n'
+        fwdata = fwdata + '发送邮件的服务器地址：' + email_server_url + '\n'
+        fwdata = fwdata + '发送邮件的服务器端口：' + email_server_port + '\n'
+        fwdata = fwdata + '发送者邮箱账号：' + sender_email + '\n'
+        fwdata = fwdata + '发送者邮箱密码：' + sender_passwd + '\n'
+        fwdata = fwdata + '接受者邮箱账号：' + reciever_email + '\n\n'
+        fwdata = fwdata + '黑名单：' + bl + '\n\n'
+
+        fw.write(fwdata)
+        print(fwdata)
+        fw.close()
+        self.closeFun()
+
 
     def dialog(self):
         QMessageBox.information(self, "提示", "请填写必选页面", QMessageBox.Yes)
@@ -878,4 +1070,5 @@ if __name__ == '__main__':
     myWin.setting.clicked.connect(scdWin.handle_click)
     myWin.show()
     sys.exit(app.exec_())
+    # getConf()
 

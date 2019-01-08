@@ -17,19 +17,26 @@ def restart_if_app_exist(exepath):
         None
 		
 #根据基金列表进行排序后，计算出其相对于屏幕的位置，用于鼠标点击选择操作
-def get_position_of_jijin_list(list, base=[103, 385], step = 15):
+def get_position_of_jijin_list(srclist, selectlist, base=[103, 385], step = 15):
     try:
         #db = cx_Oracle.connect('SYSTEM/2wsxCDE#@yhsb/oral')
         #cursor = db.cursor()
         #result = cursor.execute("select ")
-        list.sort()
+        #初始化原始列表
+        srclist.sort()
         dict = {}
         x = base[0]
         y = base[1]
-        for index in list:
+        for index in srclist:
             y += step
             dict[index] = [x, y]
-        return dict
+
+        #匹配要选择的列表
+        selectdict = {}
+        for index in selectlist:
+            if dict.has_key(index):
+                selectdict[index] = dict[index]
+        return selectdict
     except Exception:
         None
 
