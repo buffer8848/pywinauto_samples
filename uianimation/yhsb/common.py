@@ -23,18 +23,20 @@ def get_position_of_jijin_list(srclist, selectlist, base=[103, 385], step = 15):
         #cursor = db.cursor()
         #result = cursor.execute("select ")
         #初始化原始列表
-        srclist.sort()
+        # srclist.sort()
         dict = {}
         x = base[0]
         y = base[1]
+        number = 1
         for index in srclist:
             y += step
-            dict[index] = [x, y]
+            dict[index] = number
+            number += 1
 
         #匹配要选择的列表
         selectdict = {}
         for index in selectlist:
-            if dict.has_key(index):
+            if dict.get(str(index)) is not None:
                 selectdict[index] = dict[index]
         return selectdict
     except Exception:

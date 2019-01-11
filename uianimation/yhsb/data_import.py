@@ -45,7 +45,7 @@ def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     sleep(2)
 
     #输入文件路径
-    dlg_main["按时间段读取Edit2"].set_text(filePath + '\\'+year+month+day)
+    dlg_main["按时间段读取Edit2"].set_text(filePath)
 
     #进入到数据管理页面
     ctl_treedview = dlg_main["TreeView20WndClass"]
@@ -54,12 +54,17 @@ def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     # gd.getCtn1()
 
     # 选择基金
-    list = ["A003_银华保本增值混合", "A004_银华-道琼斯88指数", "A005_银华货币", "A006_银华价值优选股票", "A002_银华优势企业混合"]
-    dict = get_position_of_jijin_list(list, [103, 385], 15)
+    current = 0;
+    dict = get_position_of_jijin_list(jijinListTotal, jijinListSelected, [100, 305], 15)
     for (k, v) in dict.items():
         dlg_main["TreeView20WndClass1"].set_focus()
-        mouse.click(coords=(v[0], v[1]))
-
+        while current < v:
+            SendKeys("{DOWN}")
+            current += 1
+        SendKeys("{SPACE}")
+        #mouse.click(coords=(v[0]-40, v[1]))
+        #mouse.click(coords=(v[0], v[1]))
+    sleep(1)
     ctl_treedview = dlg_main["TreeView20WndClass2"]
     ctl_treedview.set_focus()
     ctl_treedview.click(coords=(60, 100))
@@ -79,8 +84,9 @@ def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
                     break
             except Exception:
                 None
-            app.top_window()["是(Y)"].set_focus()
-            app.top_window()["是(Y)"].click()
+            SendKeys("{ENTER}")
+            #app.top_window()["是(Y)"].set_focus()
+            #app.top_window()["是(Y)"].click()
             sleep(1)
         except Exception:
             None

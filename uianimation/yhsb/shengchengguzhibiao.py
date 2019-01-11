@@ -14,7 +14,8 @@ def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     from pywinauto.keyboard import send_keys
     from pywinauto import timings
     from time import sleep
-    from common import restart_if_app_exist,verify_control_exception, send_email_to_admin
+    from pywinauto import mouse
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, get_position_of_jijin_list
     from login import process_app_login
 
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -41,6 +42,16 @@ def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     send_keys("{RIGHT}")
     send_keys(day)
     sleep(2)
+
+    # 选择基金
+    dict = get_position_of_jijin_list(jijinListTotal, jijinListSelected, [100, 305], 15)
+    for (k, v) in dict.items():
+        dlg_main["TreeView20WndClass1"].set_focus()
+        mouse.click(coords=(v[0] - 40, v[1]))
+        mouse.click(coords=(v[0], v[1]))
+        ctl_treedview = dlg_main["TreeView20WndClass2"]
+        ctl_treedview.set_focus()
+        ctl_treedview.click(coords=(60, 100))
 
     #勾选生成估值余额对账数据
     dlg_main["生成估值余额对账数据"].check()

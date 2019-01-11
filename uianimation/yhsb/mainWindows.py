@@ -104,11 +104,13 @@ def setValue():
     global blacklist
     global jijinListTotal
     global jijinListSelected
+    global jijinCurrent
 
     if flag == 1:
         dataPath = dictC['基金列表存放路径']
         filePath = dictC['导出文件目录']
 
+        jijinCurrent = dictC["当前基金项目"]
         gzPath = dictC['估值系统路径']
         gzName = dictC['估值账户']
         gzPW = dictC['估值密码']

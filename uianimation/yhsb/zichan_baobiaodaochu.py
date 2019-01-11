@@ -20,13 +20,13 @@ def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     from login import process_app_login
 
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssReport.exe"
-    restart_if_app_exist(gzPath)
+    restart_if_app_exist(cwPath)
     sleep(3)
 
     app = Application(backend="win32").start(gzPath)
 
     #处理登录
-    process_app_login(app, gzName, gzPW)
+    process_app_login(app, cwName, cwPW)
     sleep(1)
 
     #---------------------------------------------------------------------------------------------------

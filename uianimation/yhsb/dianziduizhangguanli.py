@@ -8,7 +8,9 @@
 #--------------------------------------------------------------------------------------------------
 
 
-def Guanli_dianziduizhang(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+def Guanli_dianziduizhang(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, 
+	o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, 
+	sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
     from pywinauto.keyboard import send_keys
     from pywinauto import timings
