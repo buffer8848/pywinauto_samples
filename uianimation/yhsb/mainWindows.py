@@ -110,7 +110,7 @@ def setValue():
         dataPath = dictC['基金列表存放路径']
         filePath = dictC['导出文件目录']
 
-        # jijinCurrent = dictC["当前基金项目"]
+        jijinCurrent = dictC["当前基金项目"]
         gzPath = dictC['估值系统路径']
         gzName = dictC['估值账户']
         gzPW = dictC['估值密码']
@@ -156,26 +156,26 @@ def setValue():
 
 def DaochuShujuThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
-    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     Daochu_shuju(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent)
     obj.s.step5.emit()
 
 def ZhizuoPingzhengThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     Zhizuo_pingzheng(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent)
     obj.s.step6.emit()
 
 def ShengchengGuzhibiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     Shengcheng_guzhibiao(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent)
     obj.s.step7.emit()
 
 def Guanli_DianziduizhangThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
@@ -652,7 +652,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         threading.Thread(target=DaochuShujuThread, args=(
         self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
         blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-        jijinListSelected)).start()
+        jijinListSelected, jijinCurrent)).start()
 
     def step5Changed(self):
         frame = QImage('image/loadL.png')
@@ -677,7 +677,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         time.sleep(2)
         threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
         blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
-        jijinListTotal, jijinListSelected)).start()
+        jijinListTotal, jijinListSelected, jijinCurrent)).start()
 
     def step6Changed(self):
         frame = QImage('image/makeKeyL.png')
@@ -704,7 +704,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
             day,
             blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
+            jijinListSelected, jijinCurrent)).start()
 
     def step7Changed(self):
         frame = QImage('image/productL.png')

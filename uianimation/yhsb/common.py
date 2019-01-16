@@ -17,19 +17,17 @@ def restart_if_app_exist(exepath):
         None
 		
 #根据基金列表进行排序后，计算出其相对于屏幕的位置，用于鼠标点击选择操作
-def get_position_of_jijin_list(srclist, selectlist, base=[103, 385], step = 15):
+def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
+    from pywinauto.keyboard import SendKeys
+    from time import sleep
     try:
-        #db = cx_Oracle.connect('SYSTEM/2wsxCDE#@yhsb/oral')
-        #cursor = db.cursor()
-        #result = cursor.execute("select ")
-        #初始化原始列表
-        # srclist.sort()
+        #srclist.sort()
         dict = {}
-        x = base[0]
-        y = base[1]
         number = 1
+        current_number = 1
         for index in srclist:
-            y += step
+            if(jijinCurrent == index):
+                current_number = number
             dict[index] = number
             number += 1
 
@@ -37,8 +35,23 @@ def get_position_of_jijin_list(srclist, selectlist, base=[103, 385], step = 15):
         selectdict = {}
         for index in selectlist:
             if dict.get(str(index)) is not None:
-                selectdict[index] = dict[index]
-        return selectdict
+                selectdict[index] = dict[index] - current_number
+        #选择
+        current = 0
+        for (k, v) in selectdict.items():
+            last_pose = v
+            v -= current
+            current = last_pose
+            while v != 0:
+                if v > 0:
+                    SendKeys("{DOWN}")
+                    v -= 1
+                else:
+                    SendKeys("{UP}")
+                    v += 1
+                sleep(0.5)
+            SendKeys("{SPACE}")
+            sleep(1)
     except Exception:
         None
 

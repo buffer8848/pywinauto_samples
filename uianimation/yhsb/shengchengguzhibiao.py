@@ -9,13 +9,13 @@
 
 def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                          year, month, day, blacklist, email_server_url, email_server_port, sender_email,
-                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys
+    from pywinauto.keyboard import send_keys, SendKeys
     from pywinauto import timings
     from time import sleep
     from pywinauto import mouse
-    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, get_position_of_jijin_list
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, choose_jijin_in_list
     from login import process_app_login
 
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -44,14 +44,8 @@ def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     sleep(2)
 
     # 选择基金
-    dict = get_position_of_jijin_list(jijinListTotal, jijinListSelected, [100, 305], 15)
-    for (k, v) in dict.items():
-        dlg_main["TreeView20WndClass1"].set_focus()
-        mouse.click(coords=(v[0] - 40, v[1]))
-        mouse.click(coords=(v[0], v[1]))
-        ctl_treedview = dlg_main["TreeView20WndClass2"]
-        ctl_treedview.set_focus()
-        ctl_treedview.click(coords=(60, 100))
+    dlg_main["TreeView20WndClass2"].set_focus()
+    choose_jijin_in_list(jijinListTotal, jijinListSelected, jijinCurrent)
 
     #勾选生成估值余额对账数据
     dlg_main["生成估值余额对账数据"].check()

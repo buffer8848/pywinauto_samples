@@ -10,13 +10,13 @@
 
 def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                  year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd,
-                 reciever_email, jijinListTotal, jijinListSelected):
+                 reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys
+    from pywinauto.keyboard import send_keys, SendKeys
     from pywinauto import mouse
     from pywinauto import timings
     from time import sleep
-    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, get_position_of_jijin_list
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, choose_jijin_in_list
     from login import process_app_login
 
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
@@ -54,16 +54,8 @@ def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     # gd.getCtn1()
 
     # 选择基金
-    current = 0;
-    dict = get_position_of_jijin_list(jijinListTotal, jijinListSelected, [100, 305], 15)
-    for (k, v) in dict.items():
-        dlg_main["TreeView20WndClass1"].set_focus()
-        while current < v:
-            SendKeys("{DOWN}")
-            current += 1
-        SendKeys("{SPACE}")
-        #mouse.click(coords=(v[0]-40, v[1]))
-        #mouse.click(coords=(v[0], v[1]))
+    dlg_main["TreeView20WndClass1"].set_focus()
+    choose_jijin_in_list(jijinListTotal, jijinListSelected, jijinCurrent)
     sleep(1)
     ctl_treedview = dlg_main["TreeView20WndClass2"]
     ctl_treedview.set_focus()
