@@ -21,7 +21,7 @@ def Daochu_toucunbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     restart_if_app_exist(cwPath)
     sleep(3)
 
-    app = Application(backend="win32").start(gzPath)
+    app = Application(backend="win32").start(cwPath)
 
     #处理登录
     process_app_login(app, cwName, cwPW)

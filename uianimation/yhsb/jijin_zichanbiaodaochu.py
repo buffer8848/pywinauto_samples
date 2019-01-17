@@ -7,7 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 
-def Daochu_jijinzichan():
+def Daochu_jijinzichan(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
     from pywinauto.keyboard import SendKeys
     from pywinauto import timings
@@ -15,10 +15,10 @@ def Daochu_jijinzichan():
     from pywinauto import mouse
     from common import restart_if_app_exist, verify_control_exception, send_email_to_admin
     from login import process_app_login
-    exepath = r"F:\O32测试环境\trade\trade.exe"
-    restart_if_app_exist(exepath)
+    # exepath = r"F:\O32测试环境\trade\trade.exe"
+    restart_if_app_exist(o32Path)
     sleep(3)
-    app = Application(backend="win32").start(exepath)
+    app = Application(backend="win32").start(o32Path)
 
     #如果有提示更新，点击确定
     try:

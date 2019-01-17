@@ -17,6 +17,7 @@ from jijin_zichanbiaodaochu import Daochu_jijinzichan
 from zichan_baobiaodaochu import Daochu_zichanbaobiao
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QDialog, QFileDialog, QMenu, QAction
+from common import send_email_to_admin
 
 ascale = 0.73
 a1scale = 0.7
@@ -822,6 +823,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
         print('s10')
+
+        send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                            reciever_email, filePath + "/对帐结果管理.xls")
         time.sleep(2)
 
 
@@ -1238,7 +1242,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         elif self.Sdate3.isChecked():
             tf = 3
             datelist = self.SgetDate.text()
-            datelist = datelist.split('/')
+            datelist = datelist.split('-')
             year = datelist[0]
             month = datelist[1]
             day = datelist[2]
