@@ -17,6 +17,7 @@ from jijin_zichanbiaodaochu import Daochu_jijinzichan
 from zichan_baobiaodaochu import Daochu_zichanbaobiao
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QDialog, QFileDialog, QMenu, QAction
+from common import send_email_to_admin
 
 ascale = 0.73
 a1scale = 0.7
@@ -110,7 +111,7 @@ def setValue():
         dataPath = dictC['基金列表存放路径']
         filePath = dictC['导出文件目录']
 
-        # jijinCurrent = dictC["当前基金项目"]
+        jijinCurrent = dictC["当前基金项目"]
         gzPath = dictC['估值系统路径']
         gzName = dictC['估值账户']
         gzPW = dictC['估值密码']
@@ -156,26 +157,26 @@ def setValue():
 
 def DaochuShujuThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
-    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     Daochu_shuju(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent)
     obj.s.step5.emit()
 
 def ZhizuoPingzhengThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     Zhizuo_pingzheng(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent)
     obj.s.step6.emit()
 
 def ShengchengGuzhibiaoThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+    email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
     Shengcheng_guzhibiao(dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
         o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent)
     obj.s.step7.emit()
 
 def Guanli_DianziduizhangThread(obj, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
@@ -652,7 +653,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         threading.Thread(target=DaochuShujuThread, args=(
         self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
         blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-        jijinListSelected)).start()
+        jijinListSelected, jijinCurrent)).start()
 
     def step5Changed(self):
         frame = QImage('image/loadL.png')
@@ -677,7 +678,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         time.sleep(2)
         threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
         blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
-        jijinListTotal, jijinListSelected)).start()
+        jijinListTotal, jijinListSelected, jijinCurrent)).start()
 
     def step6Changed(self):
         frame = QImage('image/makeKeyL.png')
@@ -704,7 +705,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             self, dataPath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
             day,
             blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
+            jijinListSelected, jijinCurrent)).start()
 
     def step7Changed(self):
         frame = QImage('image/productL.png')
@@ -822,6 +823,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
         print('s10')
+
+        send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                            reciever_email, filePath + "/对帐结果管理.xls")
         time.sleep(2)
 
 
@@ -1238,7 +1242,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         elif self.Sdate3.isChecked():
             tf = 3
             datelist = self.SgetDate.text()
-            datelist = datelist.split('/')
+            datelist = datelist.split('-')
             year = datelist[0]
             month = datelist[1]
             day = datelist[2]

@@ -17,19 +17,17 @@ def restart_if_app_exist(exepath):
         None
 		
 #根据基金列表进行排序后，计算出其相对于屏幕的位置，用于鼠标点击选择操作
-def get_position_of_jijin_list(srclist, selectlist, base=[103, 385], step = 15):
+def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
+    from pywinauto.keyboard import SendKeys
+    from time import sleep
     try:
-        #db = cx_Oracle.connect('SYSTEM/2wsxCDE#@yhsb/oral')
-        #cursor = db.cursor()
-        #result = cursor.execute("select ")
-        #初始化原始列表
-        # srclist.sort()
+        #srclist.sort()
         dict = {}
-        x = base[0]
-        y = base[1]
         number = 1
+        current_number = 1
         for index in srclist:
-            y += step
+            if(jijinCurrent == index):
+                current_number = number
             dict[index] = number
             number += 1
 
@@ -37,8 +35,23 @@ def get_position_of_jijin_list(srclist, selectlist, base=[103, 385], step = 15):
         selectdict = {}
         for index in selectlist:
             if dict.get(str(index)) is not None:
-                selectdict[index] = dict[index]
-        return selectdict
+                selectdict[index] = dict[index] - current_number
+        #选择
+        current = 0
+        for (k, v) in selectdict.items():
+            last_pose = v
+            v -= current
+            current = last_pose
+            while v != 0:
+                if v > 0:
+                    SendKeys("{DOWN}")
+                    v -= 1
+                else:
+                    SendKeys("{UP}")
+                    v += 1
+                sleep(0.5)
+            SendKeys("{SPACE}")
+            sleep(1)
     except Exception:
         None
 
@@ -58,22 +71,36 @@ def capture_current_screen():
     None
 
 #发送邮件通知到指定的帐户
-def send_email_to_admin(message, server, port, sender, pwd, reciever):
+def send_email_to_admin(text, server, port, sender, pwd, reciever, attachfile):
     import smtplib
+    from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
     from email.header import Header
-    # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
-    message = MIMEText(message, 'plain', 'utf-8')
-    message['From'] = Header("自动化测试程序", 'utf-8')   # 发送者
-    message['To'] =  Header("自动化使用者", 'utf-8')        # 接收者
-    
-    subject = '自动化测试程序发生异常，请处理！'
-    message['Subject'] = Header(subject, 'utf-8')
-    
-    smtpObj = smtplib.SMTP(server, port)
-    smtpObj.login(sender, pwd)
+    from email.mime.base import MIMEBase
+    from email import encoders
+    import os
+
     try:
+        smtpObj = smtplib.SMTP(server, port)
+        smtpObj.login(sender, pwd)
+
+        # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
+        message = MIMEMultipart()
+        message['From'] = Header("自动化测试程序", 'utf-8')  # 发送者
+        message['To'] = Header("自动化使用者", 'utf-8')  # 接收者
+
+        subject = '自动化测试程序发生异常，请处理！'
+        message['Subject'] = Header(subject, 'utf-8')
+        message.attach(MIMEText(text))
+
+        # 带上二进制附件
+        if attachfile is not None:
+            part = MIMEBase('application', 'octet-stream')  # 'octet-stream': binary data
+            part.set_payload(open(attachfile, 'rb').read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(attachfile))
+            message.attach(part)
         smtpObj.sendmail(sender, reciever, message.as_string())
-    except smtplib.SMTPException:
+    except Exception:
         print("Error: 无法发送邮件")
     smtpObj.quit()
