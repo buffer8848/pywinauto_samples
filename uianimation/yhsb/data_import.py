@@ -8,9 +8,9 @@
 #--------------------------------------------------------------------------------------------------
 
 
-def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                  year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd,
-                 reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
+                 reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
     from pywinauto.keyboard import send_keys, SendKeys
     from pywinauto import mouse
@@ -45,7 +45,7 @@ def Daochu_shuju(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     sleep(2)
 
     #输入文件路径
-    dlg_main["按时间段读取Edit2"].set_text(filePath)
+    dlg_main["按时间段读取Edit2"].set_text(imPath)
 
     #进入到数据管理页面
     ctl_treedview = dlg_main["TreeView20WndClass"]

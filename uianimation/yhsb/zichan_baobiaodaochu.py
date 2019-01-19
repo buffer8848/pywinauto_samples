@@ -7,7 +7,7 @@
 
 #--------------------------------------------------------------------------------------------------
 
-def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+def Daochu_zichanbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                          year, month, day, blacklist, email_server_url, email_server_port, sender_email,
                          sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
@@ -85,7 +85,7 @@ def Daochu_zichanbaobiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName
     #输出excel
     dlg_outxls = app["输出EXCEL"]
     dlg_outxls.set_focus()
-    dlg_outxls.Edit2.set_text(filePath)
+    dlg_outxls.Edit2.set_text(exPath)
     dlg_outxls.Edit3.set_text(r"对帐结果管理.xls")
     dlg_outxls["确 定"].click()
     sleep(2)
