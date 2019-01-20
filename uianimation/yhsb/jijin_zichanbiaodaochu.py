@@ -51,6 +51,7 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
 
     #主界面出现
     dlg_main = app["TfrmMain"]
+
     dlg_main.wait('exists enabled visible ready')
 
     #点击信息查询->综合信息查询

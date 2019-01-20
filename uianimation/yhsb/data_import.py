@@ -67,7 +67,8 @@ def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cw
     while True: #等待保存成功后的弹窗
         try:
             if verify_control_exception(app.top_window(), blacklist):
-                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd, reciever_email)
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email, exPath + "/对帐结果管理.xls")
                 sleep(300)
             try:
                 if app["数据接口管理Dialog"]["读取完毕"].exists():

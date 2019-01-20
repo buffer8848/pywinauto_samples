@@ -58,7 +58,7 @@ def Zhizuo_pingzheng(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email)
+                                    reciever_email, exPath + "/对帐结果管理.xls")
                 sleep(300)
             try:
                 if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():
