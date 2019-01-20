@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingWindows</class>
+ <widget class="QMainWindow" name="SettingWindows">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>864</width>
+    <height>581</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>设置</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="settingTab">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>801</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab1">
+     <attribute name="title">
+      <string>路径（必填）</string>
+     </attribute>
+     <widget class="QLineEdit" name="Ssystem2">
+      <property name="geometry">
+       <rect>
+        <x>98</x>
+        <y>250</y>
+        <width>561</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选取基金列表：</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetCw">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>250</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择系统</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetFile">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>30</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择文件</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SfilePath">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>30</y>
+        <width>531</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Ssystem1">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>170</y>
+        <width>561</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>250</y>
+        <width>72</width>
+        <height>15</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>财务系统：</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetO32">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>330</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择系统</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Ssystem3">
+      <property name="geometry">
+       <rect>
+        <x>68</x>
+        <y>330</y>
+        <width>591</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>330</y>
+        <width>72</width>
+        <height>15</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>O32：</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetGz">
+      <property name="geometry">
+       <rect>
+        <x>682</x>
+        <y>170</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择系统</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>170</y>
+        <width>72</width>
+        <height>15</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>估值系统：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>200</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>用户名：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SgzName">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>200</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>200</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>密码：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SgzPW">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>200</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ScwPW">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>280</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ScwName">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>280</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>280</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>密码：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>280</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>用户名：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="So32PW">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>360</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>360</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>密码：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="So32Name">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>360</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>360</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>用户名：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SinPath">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>60</y>
+        <width>531</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>导入数据路径：</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetIm">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>60</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择文件夹</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetEx">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>90</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择文件夹</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SoutPath">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>90</y>
+        <width>531</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>导出数据路径：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>默认基金名称：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SfundName">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>120</y>
+        <width>531</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab2">
+     <attribute name="title">
+      <string>制作日期</string>
+     </attribute>
+     <widget class="QRadioButton" name="Sdate1">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>80</y>
+        <width>115</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string> T 日</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="Sdate2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>140</y>
+        <width>115</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string> T - 1 日</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="Sdate3">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>200</y>
+        <width>115</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string> 自定义</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="SgetDate">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>200</y>
+        <width>110</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab3">
+     <attribute name="title">
+      <string>邮件</string>
+     </attribute>
+     <widget class="QLineEdit" name="SserverIP">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>50</y>
+        <width>301</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>50</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>邮件的服务器地址：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>110</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>邮件的服务器端口：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>170</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>发送邮箱账号：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>230</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>发送邮箱密码：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>290</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>接收邮箱账号：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SserverPort">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>110</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SsendID">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>170</y>
+        <width>331</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SsendPW">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>230</y>
+        <width>331</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SrsvID">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>290</y>
+        <width>331</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab4">
+     <attribute name="title">
+      <string>黑名单</string>
+     </attribute>
+     <widget class="QTextEdit" name="SblackList">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>110</y>
+        <width>681</width>
+        <height>221</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>351</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>制作黑名单（以中文字符“、”分割，无需换行）：</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="Squit">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>10</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>等线</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>设置</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Ssubmit">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>500</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>确 定</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Scancel">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>500</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>取 消</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
