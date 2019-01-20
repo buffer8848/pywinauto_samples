@@ -7,9 +7,9 @@
 #--------------------------------------------------------------------------------------------------
 
 
-def Shengcheng_guzhibiao(exePath, filePath, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
+def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                          year, month, day, blacklist, email_server_url, email_server_port, sender_email,
-                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected, jijinCurrent):
+                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
     from pywinauto.keyboard import send_keys, SendKeys
     from pywinauto import timings

@@ -16,17 +16,20 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>小智机器人</string>
+   <string>AVS自动估值系统</string>
   </property>
   <property name="locale">
    <locale language="Chinese" country="China"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
    <widget class="QWidget" name="horizontalLayoutWidget_3">
     <property name="geometry">
      <rect>
       <x>142</x>
-      <y>60</y>
+      <y>70</y>
       <width>380</width>
       <height>71</height>
      </rect>
@@ -73,7 +76,7 @@
     <property name="geometry">
      <rect>
       <x>550</x>
-      <y>60</y>
+      <y>70</y>
       <width>361</width>
       <height>71</height>
      </rect>
@@ -129,9 +132,9 @@
    <widget class="QLabel" name="icon">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>141</width>
+      <x>50</x>
+      <y>20</y>
+      <width>291</width>
       <height>21</height>
      </rect>
     </property>
@@ -143,15 +146,18 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::NoContextMenu</enum>
+    </property>
     <property name="text">
-     <string>小智机器人</string>
+     <string>AVS自动估值系统</string>
     </property>
    </widget>
    <widget class="QPushButton" name="setting">
     <property name="geometry">
      <rect>
-      <x>980</x>
-      <y>10</y>
+      <x>960</x>
+      <y>20</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -169,8 +175,8 @@
    <widget class="QPushButton" name="min">
     <property name="geometry">
      <rect>
-      <x>1010</x>
-      <y>10</y>
+      <x>1000</x>
+      <y>20</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -189,7 +195,7 @@
     <property name="geometry">
      <rect>
       <x>1040</x>
-      <y>10</y>
+      <y>20</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -206,6 +212,9 @@
       <width>961</width>
       <height>641</height>
      </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::PreventContextMenu</enum>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -241,11 +250,12 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>启动报表系统</string>
+            <string>启动
+报表系统</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -292,7 +302,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -343,7 +353,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -394,11 +404,12 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>关闭并等待托管行</string>
+            <string>关闭
+等待托管行</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -436,7 +447,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -487,7 +498,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -551,11 +562,12 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>启动估值系统</string>
+            <string>启动
+估值系统</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -602,7 +614,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -653,7 +665,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -704,7 +716,7 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>10</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -755,11 +767,12 @@
            <property name="font">
             <font>
              <family>Arial</family>
-             <pointsize>9</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>关闭并等待托管行</string>
+            <string>关闭
+等待托管行</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -817,11 +830,11 @@
          <property name="font">
           <font>
            <family>Arial</family>
-           <pointsize>10</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
-          <string/>
+          <string>循环3次</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -1083,7 +1096,8 @@
             </font>
            </property>
            <property name="text">
-            <string>启动报表系统</string>
+            <string>启动
+报表系统</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -1248,6 +1262,19 @@
       </layout>
      </widget>
     </widget>
+   </widget>
+   <widget class="QLabel" name="iconpic">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar">

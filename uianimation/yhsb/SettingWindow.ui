@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>856</width>
-    <height>575</height>
+    <width>864</width>
+    <height>581</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>30</x>
       <y>50</y>
       <width>801</width>
-      <height>411</height>
+      <height>431</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -34,7 +34,7 @@
       <property name="geometry">
        <rect>
         <x>98</x>
-        <y>210</y>
+        <y>250</y>
         <width>561</width>
         <height>21</height>
        </rect>
@@ -50,14 +50,14 @@
        </rect>
       </property>
       <property name="text">
-       <string>数据读取路径：</string>
+       <string>选取基金列表：</string>
       </property>
      </widget>
      <widget class="QPushButton" name="SgetCw">
       <property name="geometry">
        <rect>
         <x>680</x>
-        <y>210</y>
+        <y>250</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -93,7 +93,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>120</y>
+        <y>170</y>
         <width>561</width>
         <height>21</height>
        </rect>
@@ -103,7 +103,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>210</y>
+        <y>250</y>
         <width>72</width>
         <height>15</height>
        </rect>
@@ -116,7 +116,7 @@
       <property name="geometry">
        <rect>
         <x>680</x>
-        <y>300</y>
+        <y>330</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -129,7 +129,7 @@
       <property name="geometry">
        <rect>
         <x>68</x>
-        <y>300</y>
+        <y>330</y>
         <width>591</width>
         <height>21</height>
        </rect>
@@ -139,7 +139,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>300</y>
+        <y>330</y>
         <width>72</width>
         <height>15</height>
        </rect>
@@ -152,7 +152,7 @@
       <property name="geometry">
        <rect>
         <x>682</x>
-        <y>120</y>
+        <y>170</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -165,7 +165,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>120</y>
+        <y>170</y>
         <width>72</width>
         <height>15</height>
        </rect>
@@ -178,7 +178,7 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>150</y>
+        <y>200</y>
         <width>61</width>
         <height>16</height>
        </rect>
@@ -191,7 +191,7 @@
       <property name="geometry">
        <rect>
         <x>180</x>
-        <y>150</y>
+        <y>200</y>
         <width>161</width>
         <height>21</height>
        </rect>
@@ -201,7 +201,7 @@
       <property name="geometry">
        <rect>
         <x>380</x>
-        <y>150</y>
+        <y>200</y>
         <width>41</width>
         <height>16</height>
        </rect>
@@ -214,7 +214,7 @@
       <property name="geometry">
        <rect>
         <x>430</x>
-        <y>150</y>
+        <y>200</y>
         <width>161</width>
         <height>21</height>
        </rect>
@@ -224,7 +224,7 @@
       <property name="geometry">
        <rect>
         <x>430</x>
-        <y>240</y>
+        <y>280</y>
         <width>161</width>
         <height>21</height>
        </rect>
@@ -234,7 +234,7 @@
       <property name="geometry">
        <rect>
         <x>180</x>
-        <y>240</y>
+        <y>280</y>
         <width>161</width>
         <height>21</height>
        </rect>
@@ -244,7 +244,7 @@
       <property name="geometry">
        <rect>
         <x>380</x>
-        <y>240</y>
+        <y>280</y>
         <width>41</width>
         <height>16</height>
        </rect>
@@ -257,7 +257,7 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>240</y>
+        <y>280</y>
         <width>61</width>
         <height>16</height>
        </rect>
@@ -270,7 +270,7 @@
       <property name="geometry">
        <rect>
         <x>430</x>
-        <y>330</y>
+        <y>360</y>
         <width>161</width>
         <height>21</height>
        </rect>
@@ -280,7 +280,7 @@
       <property name="geometry">
        <rect>
         <x>380</x>
-        <y>330</y>
+        <y>360</y>
         <width>41</width>
         <height>16</height>
        </rect>
@@ -293,7 +293,7 @@
       <property name="geometry">
        <rect>
         <x>180</x>
-        <y>330</y>
+        <y>360</y>
         <width>161</width>
         <height>21</height>
        </rect>
@@ -303,7 +303,7 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>330</y>
+        <y>360</y>
         <width>61</width>
         <height>16</height>
        </rect>
@@ -312,7 +312,7 @@
        <string>用户名：</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="SdicPath">
+     <widget class="QLineEdit" name="SinPath">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -332,10 +332,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>导出数据路径：</string>
+       <string>导入数据路径：</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="SgetEx">
+     <widget class="QPushButton" name="SgetIm">
       <property name="geometry">
        <rect>
         <x>680</x>
@@ -346,6 +346,65 @@
       </property>
       <property name="text">
        <string>选择文件夹</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SgetEx">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>90</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>选择文件夹</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SoutPath">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>90</y>
+        <width>531</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>导出数据路径：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>默认基金名称：</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="SfundName">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>120</y>
+        <width>531</width>
+        <height>21</height>
+       </rect>
       </property>
      </widget>
     </widget>
