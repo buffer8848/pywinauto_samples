@@ -16,7 +16,7 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
     from pywinauto import timings
     from time import sleep
 
-    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin
+    from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, choose_jijin_in_list
     from login import process_app_login
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
     restart_if_app_exist(gzPath)
@@ -39,9 +39,6 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
     dlg_main.set_focus()
     dlg_main.menu_select("电子对帐 -> 对帐结果管理")
     sleep(1)
-    dlg_main["查询"].set_focus()
-    dlg_main["查询"].click()
-    sleep(1)
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
@@ -51,6 +48,17 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
     send_keys("{RIGHT}")
     send_keys(day)
     sleep(2)
+
+    #选择基金
+    dlg_main["基金列表>>"].set_focus()
+    dlg_main["基金列表>>"].click()
+    sleep(2)
+    choose_jijin_in_list(jijinListTotal, jijinListSelected, "")
+
+    #点击查询等待结果输出
+    dlg_main["查询"].set_focus()
+    dlg_main["查询"].click()
+    sleep(1)
 
     #点击右键菜单
     dlg_main["数据管理"].set_focus()

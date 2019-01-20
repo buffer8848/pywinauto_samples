@@ -24,7 +24,7 @@ def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
         #srclist.sort()
         dict = {}
         number = 1
-        current_number = 1
+        current_number = 0
         for index in srclist:
             if(jijinCurrent == index):
                 current_number = number
@@ -51,7 +51,9 @@ def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
                     v += 1
                 sleep(0.5)
             SendKeys("{SPACE}")
-            sleep(1)
+            sleep(0.3)
+            SendKeys("{ESC}")
+            sleep(0.2)
     except Exception:
         None
 
