@@ -21,6 +21,9 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
     app = Application(backend="win32").start(o32Path)
 
     #如果有提示更新，点击确定
+    sleep(1)
+    SendKeys("{ENTER}")
+    sleep(1)
     try:
         app["提示"]["确定"].set_focus()
         app["提示"]["确定"].click()
@@ -39,13 +42,19 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
 
     #如果有警告，点击是
     try:
+        app["警告"]["是(Y)"].set_focus()
+        app["警告"]["是(Y)"].click()
+        sleep(5)
+    except Exception:
+        None
+
+    try:
         app["自动更新"].set_focus() # 自动更新界面点关闭
         app["自动更新"]["关闭(Esc/Enter)"].click()
         sleep(5)
         app["警告"]["是(Y)"].set_focus()
         app["警告"]["是(Y)"].click()
         sleep(5)
-        
     except Exception:
         None
 
@@ -55,7 +64,7 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
     dlg_main.wait('exists enabled visible ready')
 
     #点击信息查询->综合信息查询
-    mouse.click(coords=(96,781)) #TODO
+    mouse.click(coords=(88,643)) #TODO
     sleep(3)
     mouse.click(coords=(68,311)) #TODO
     sleep(5)
@@ -67,7 +76,7 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
     mouse.click(coords=(324,118)) #TODO
     sleep(3)
     mouse.click(coords=(137,89)) #TODO
-    SendKeys("2")
+    SendKeys("-1")
     sleep(2)
     mouse.click(coords=(142,109)) #TODO
     #dlg_main["THsEdit"].set_text("-1  所有基金")
@@ -80,6 +89,11 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
     sleep(5)
     app["另存为"]["保存(S)"].set_focus()
     app["另存为"]["保存(S)"].click()
+    sleep(1)
+    SendKeys("{LEFT}")
+    sleep(1)
+    SendKeys("{ENTER}")
+    sleep(3)
 
     #qiut
     try:

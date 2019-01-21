@@ -151,7 +151,8 @@ def setValue():
         reciever_email = dictC['接受者邮箱账号']
 
         bl = dictC['黑名单']
-        blacklist = bl.split('、')
+        if bl != "":
+            blacklist = bl.split('、')
 
         if dataPath != '':
             data = pd.read_excel(dataPath)
@@ -1365,7 +1366,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
                 tf = 3
                 datelist = self.SgetDate.text()
 
-                datelist = datelist.split('/')
+                datelist = datelist.split('-')
                 year = datelist[0]
                 month = datelist[1]
                 day = datelist[2]
