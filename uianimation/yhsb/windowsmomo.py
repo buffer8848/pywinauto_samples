@@ -700,6 +700,8 @@ class Ui_mainWindow(object):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton:
+
+
             self.move(event.globalPos() - self.dragPosition)
             event.accept()
 

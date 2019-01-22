@@ -65,9 +65,17 @@ def Zhizuo_pingzheng(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW
                     status = False
             except Exception:
                 None
-            send_keys("{ENTER}")
-            #app.top_window()["是(Y)"].set_focus()
-            #app.top_window()["是(Y)"].click()
+            #send_keys("{ENTER}")
+            try:
+                app.top_window()["是(Y)"].set_focus()
+                app.top_window()["是(Y)"].click()
+            except Exception:
+                None
+            try:
+                app.top_window()["确定"].set_focus()
+                app.top_window()["确定"].click()
+            except Exception:
+                None
             sleep(1)
         except Exception:
             None
