@@ -66,7 +66,7 @@ def Daochu_zichanbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email)
+                                    reciever_email, exPath + "/对帐结果管理.xls")
                 sleep(300)
 
             try:
@@ -94,7 +94,8 @@ def Daochu_zichanbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW
     while True: #等待保存成功后的弹窗
         try:
             if verify_control_exception(app.top_window(), []):
-                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email, exPath + "/对帐结果管理.xls")
                 sleep(300)
 
             try:
@@ -114,7 +115,8 @@ def Daochu_zichanbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW
     while True: #等待保存成功后的弹窗
         try:
             if verify_control_exception(app.top_window(), []):
-                send_email_to_admin("helloworld", "179770346@qq.com", "120315155@qq.com")
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email, exPath + "/对帐结果管理.xls")
                 sleep(300)
                 
             try:

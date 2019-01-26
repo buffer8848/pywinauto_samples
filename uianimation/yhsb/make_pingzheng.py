@@ -58,16 +58,24 @@ def Zhizuo_pingzheng(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email)
+                                    reciever_email, exPath + "/对帐结果管理.xls")
                 sleep(300)
             try:
                 if app["业务凭证管理Dialog"]["凭证制作完毕!"].exists():
                     status = False
             except Exception:
                 None
-            send_keys("{ENTER}")
-            #app.top_window()["是(Y)"].set_focus()
-            #app.top_window()["是(Y)"].click()
+            #send_keys("{ENTER}")
+            try:
+                app.top_window()["是(Y)"].set_focus()
+                app.top_window()["是(Y)"].click()
+            except Exception:
+                None
+            try:
+                app.top_window()["确定"].set_focus()
+                app.top_window()["确定"].click()
+            except Exception:
+                None
             sleep(1)
         except Exception:
             None

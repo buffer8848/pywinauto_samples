@@ -24,7 +24,7 @@ def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
         #srclist.sort()
         dict = {}
         number = 1
-        current_number = 1
+        current_number = 0
         for index in srclist:
             if(jijinCurrent == index):
                 current_number = number
@@ -37,6 +37,11 @@ def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
             if dict.get(str(index)) is not None:
                 selectdict[index] = dict[index] - current_number
         #选择
+        if current_number != 0:
+            SendKeys("{SPACE}") #not choose current
+            sleep(0.5)
+            SendKeys("{ESC}") #防止进入编辑状态
+            sleep(0.5)
         current = 0
         for (k, v) in selectdict.items():
             last_pose = v
@@ -51,16 +56,20 @@ def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
                     v += 1
                 sleep(0.5)
             SendKeys("{SPACE}")
-            sleep(1)
+            sleep(0.5)
+            SendKeys("{ESC}")
+            sleep(0.5)
     except Exception:
         None
 
 #判断当前窗口句柄是否含有白名单字段
 def verify_control_exception(control, whitelist):
-
     for index in whitelist:
         try:
-            if (control[index].exist()):
+            control.set_focus()
+            if control.wrapper_object().texts().__str__().find(index) >= 0:
+                return True
+            if control._ctrl_identifiers().values().__str__().find(index) >= 0:
                 return True
         except Exception:
             None
