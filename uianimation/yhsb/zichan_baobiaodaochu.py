@@ -42,12 +42,12 @@ def Daochu_zichanbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
-    send_keys("{ENTER}")
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
+    SendKeys("{ENTER}")
     sleep(2)
 
     #点击基金浏览

@@ -220,6 +220,11 @@ def Daochu_JijinbaobiaoThread(obj, dataPath, imPath, exPath, fundName, gzPath, g
         email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
     obj.s.Tstep7.emit()
 
+def hebing_excel(obj, heduijingzhi_excel, toucun_excel, zichan_excel, outputexcel):
+    from process_excel import Merge_excels
+    Merge_excels(heduijingzhi_excel, toucun_excel, zichan_excel, outputexcel)
+    obj.s.Tstep8.emit()
+
 class MyThread(threading.Thread):
     def __init__(self, func, args=()):
         super(MyThread, self).__init__()
@@ -1199,6 +1204,11 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         QApplication.processEvents()
         print('s7')
         time.sleep(2)
+
+        threading.Thread(target=hebing_excel, args=(
+            self, exPath+"\\核对净值示范空表.xlsx", exPath+"\\现金头寸预测汇总表.xls",
+            exPath+"\\资产情况统计表.xls", exPath+"\\shuchu.xls")).start()
+
         self.s.Tstep8.emit()
 
     def Tstep8Changed(self):
