@@ -17,33 +17,31 @@ def restart_if_app_exist(exepath):
         None
 		
 #根据基金列表进行排序后，计算出其相对于屏幕的位置，用于鼠标点击选择操作
-def choose_jijin_in_list(srclist, selectlist, jijinCurrent):
+#startflag = True表示从头开始，负责从当前选中位置开始
+#currentflag = True表示选择当前，False表示不选当前
+def choose_jijin_in_list(srclist, selectlist, jijinCurrent, currentflag=False, startflag = False):
     from pywinauto.keyboard import SendKeys
     from time import sleep
     try:
-        #srclist.sort()
         dict = {}
+        list = []
         number = 1
         current_number = 0
         for index in srclist:
-            if(jijinCurrent == index):
+            if jijinCurrent == index:
                 current_number = number
             dict[index] = number
             number += 1
-
+        if startflag is True:
+            current_number = 1
+        if currentflag is False:
+            list.append(dict[jijinCurrent] - current_number)
         #匹配要选择的列表
-        selectdict = {}
         for index in selectlist:
             if dict.get(str(index)) is not None:
-                selectdict[index] = dict[index] - current_number
-        #选择
-        if current_number != 0:
-            SendKeys("{SPACE}") #not choose current
-            sleep(0.5)
-            SendKeys("{ESC}") #防止进入编辑状态
-            sleep(0.5)
+                list.append(dict[index] - current_number)
         current = 0
-        for (k, v) in selectdict.items():
+        for v in list:
             last_pose = v
             v -= current
             current = last_pose

@@ -3,11 +3,13 @@
 import os
 import time
 import sys
+import ctypes
 import datetime
 import threading
 import pandas as pd
 from windowsmomo import *
 from SettingWindow import *
+# from Daochu_test import Daochu_shuju
 from data_import import Daochu_shuju
 from make_pingzheng import Zhizuo_pingzheng
 from shengchengguzhibiao import Shengcheng_guzhibiao
@@ -20,8 +22,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QDia
 from common import send_email_to_admin
 
 ascale = 0.73
-a1scale = 0.7
-a2scale = 0.63
+a1scale = 0.73
+a2scale = 0.95
+stepdic = {1: '进行环境检查', 2: '读取产品参数维护表', 3: '启动估值系统', 4: '文件导入', 5: '制作凭证', 6: '生成估值表', 7: '关闭等待托管行', 8: '启动报表系统', 9: '电子对账查询', 10: '处理并发送对账结果', 11: '关闭等待托管行', 12: '启动报表系统', 13: '导出资产情况统计表', 14: '导出现金头寸预测汇总表', 15: '关闭', 16: '启动O32', 17: '导出基金资产表', 18: '净值核对', 19: '关闭'}
 
 
 #-----------------------------------------------------------------------------------------
@@ -56,13 +59,19 @@ o32Path = ''
 o32Name = ''
 o32PW = ''
 
-global flagCir
-flagCir = 0
-dictC = {}
-
-confName = ''
+catch = 0
 
 flagCir = 1
+dictC = {}
+confName = ''
+
+threadid = 0
+single = 0
+F = []
+w1 = 0.03
+w2 = 0.03
+w3 = 0.03
+tw1 = 0.03
 
 def getConf():
     readconf = open('conf.txt', 'r', encoding='gbk')
@@ -113,6 +122,8 @@ def setValue():
     global blacklist
     global jijinListTotal
     global jijinListSelected
+
+    global catch
 
     if flag == 1:
         dataPath = dictC['选取基金列表']
@@ -167,63 +178,208 @@ def setValue():
 def DaochuShujuThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Daochu_shuju(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.step5.emit()
+    try:
+        Daochu_shuju(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.step5.emit()
+        elif single == 1:
+            single = 0
+            frame = QImage('image/loadL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.step4Label.width(), obj.step4Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.step4Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('4')
+        fwc.close()
+
 
 def ZhizuoPingzhengThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Zhizuo_pingzheng(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.step6.emit()
+    try:
+        Zhizuo_pingzheng(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.step6.emit()
+        elif single == 1:
+            single = 0
+            frame = QImage('image/makeKeyL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.step5Label.width(), obj.step5Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.step5Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('5')
+        fwc.close()
 
 def ShengchengGuzhibiaoThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Shengcheng_guzhibiao(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.step7.emit()
+    try:
+        Shengcheng_guzhibiao(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.step7.emit()
+        elif single == 1 and 6 not in F:
+            single = 0
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.step6Label.width(), obj.step6Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.step6Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('6')
+        fwc.close()
 
 def Guanli_DianziduizhangThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Guanli_dianziduizhang(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.step10.emit()
+    try:
+        Guanli_dianziduizhang(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.step10.emit()
+        elif single == 1:
+            single = 1
+            frame = QImage('image/mngL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.step9Label.width(), obj.step9Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.step9Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('9')
+        fwc.close()
 
 def Daochu_ZichanbaobiaoThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Daochu_zichanbaobiao(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, 
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, 
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.Tstep3.emit()
+    try:
+        Daochu_zichanbaobiao(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.Tstep3.emit()
+        elif single == 1:
+            single = 0
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.T2step2Label.width(), obj.T2step2Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.T2step2Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('13')
+        fwc.close()
 
 def Daochu_ToucunThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Daochu_toucunbaobiao(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.Tstep4.emit()
+    try:
+        Daochu_toucunbaobiao(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.Tstep4.emit()
+        elif single == 1:
+            single = 0
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.T2step3Label.width(), obj.T2step3Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.T2step3Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('14')
+        fwc.close()
 
 def Daochu_JijinbaobiaoThread(obj, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
     o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
     email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
-    Daochu_jijinzichan(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
-        o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
-        email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
-    obj.s.Tstep7.emit()
+    try:
+        Daochu_jijinzichan(dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW,
+            o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url,
+            email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.Tstep7.emit()
+        elif single == 1:
+            single = 0
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.T2step6Label.width(), obj.T2step6Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.T2step6Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('17')
+        fwc.close()
 
 def hebing_excel(obj, heduijingzhi_excel, toucun_excel, zichan_excel, outputexcel):
-    from process_excel import Merge_excels
-    Merge_excels(heduijingzhi_excel, toucun_excel, zichan_excel, outputexcel)
-    obj.s.Tstep8.emit()
+    try:
+        from process_excel import Merge_excels
+        Merge_excels(heduijingzhi_excel, toucun_excel, zichan_excel, outputexcel)
+        # Daochu_shuju()
+        global single
+        if single == 0:
+            obj.s.Tstep8.emit()
+        elif single == 1 and 27 not in F:
+            single = 0
+            frame = QImage('image/mngL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = obj.T2step7Label.width(), obj.T2step7Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            obj.T2step7Label.setPixmap(pix)
+            QApplication.processEvents()
+    except:
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('18')
+        fwc.close()
 
 class MyThread(threading.Thread):
     def __init__(self, func, args=()):
@@ -276,10 +432,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.startButton.clicked.connect(self.on_click)
         self.PauseButton.clicked.connect(self.pause_click)
         self.quitButton.clicked.connect(self.quit_click)
-        self.step2Label.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.step2Label.customContextMenuRequested.connect(self.custom_right_menu_step2)
-        self.step4Label.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.step4Label.customContextMenuRequested.connect(self.custom_right_menu_step4)
         self.step5Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.step5Label.customContextMenuRequested.connect(self.custom_right_menu_step5)
         self.step6Label.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -288,10 +440,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step9Label.customContextMenuRequested.connect(self.custom_right_menu_step9)
         self.step10Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.step10Label.customContextMenuRequested.connect(self.custom_right_menu_step10)
-        self.step7Label.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.step7Label.customContextMenuRequested.connect(self.custom_right_menu_step7)
-        self.step11Label.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.step11Label.customContextMenuRequested.connect(self.custom_right_menu_step11)
         self.arrows2LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
         self.arrows2LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait1)
         self.arrows7LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -306,6 +454,8 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.T2step6Label.customContextMenuRequested.connect(self.custom_right_menu_T2s6)
         self.T2step7Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.T2step7Label.customContextMenuRequested.connect(self.custom_right_menu_T2s7)
+        self.T2arrows4LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.T2arrows4LongLabel.customContextMenuRequested.connect(self.custom_right_menu_T2w1)
 
         self.s.step1.connect(self.step1Changed)
         self.s.step2.connect(self.step2Changed)
@@ -331,10 +481,22 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.s.Tstep7.connect(self.Tstep7Changed)
         self.s.Tstep8.connect(self.Tstep8Changed)
         self.s.Twait1.connect(self.Twait1Changed)
+        frc = open('catch.txt', 'r', encoding='utf8')
+        c = frc.read()
+        if c != '0':
+            stp = stepdic[int(c)]
+            print(stp)
+            QMessageBox.information(self, "提示", "上次执行【"+stp+"】出现异常", QMessageBox.Yes)
+        frc.close()
+        fwc = open('catch.txt', 'w', encoding='utf8')
+        fwc.write('0')
+        fwc.close()
+
 
     def on_click(self):
         setValue()
-        if dataPath == '' or imPath == '' or exPath == '' or fundName == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '' :
+        global chldt1
+        if dataPath == '' or imPath == '' or exPath == '' or fundName == '' or gzPath == '' or gzName == '' or gzPW == '' or cwPath == '' or cwName == '' or cwPW == '' or o32Path == '' or o32Name == '' or o32PW == '':
             self.dialog()
         else:
             if self.setTime.isChecked():
@@ -344,48 +506,39 @@ class MyWindow(QMainWindow, Ui_mainWindow):
                 print(hour, secend)
                 setStart = self.startTimeEdit.text().split(':')
                 setEnd = self.endTimeEdit.text().split(':')
-                if (setStart[0] < hour and setEnd[0] > hour) or (setStart[0] == hour and setStart[1] < secend) or (setEnd[0] == hour and setEnd[1] > secend):
+                if (setStart[0] < hour and setEnd[0] > hour) or (setStart[0] == hour and setStart[1] < secend) or (
+                        setEnd[0] == hour and setEnd[1] > secend):
                     if self.tabWidget.currentIndex() == 0:
                         self.s.step1.emit()
                     else:
                         self.s.Tstep1.emit()
                 else:
-                    self.timeDialog()
+                    self.delayDialog()
             else:
                 if self.tabWidget.currentIndex() == 0:
                     self.s.step1.emit()
                 else:
                     self.s.Tstep1.emit()
 
-    def pause(self):
-        self.__flag.clear()  # 设置为False, 让线程阻塞
-
-    def resume(self):
-        self.__flag.set()  # 设置为True, 让线程停止阻塞
-
-    def stop(self):
-        self.__flag.set()  # 将线程从暂停状态恢复, 如何已经暂停的话
-        self.__running.clear()  # 设置为False
-
     def pause_click(self):
         if self.PauseButton.text() == '暂停':
             self.PauseButton.setText('继续')
             QApplication.processEvents()
-            self.pause()
+            print('暂停')
         elif self.PauseButton.text() == '继续':
             self.PauseButton.setText('暂停')
             QApplication.processEvents()
-            self.resume()
+            print('继续')
 
     def quit_click(self):
-        # self.stop()
-        self.tabWidget.setCurrentIndex(1)
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(threadid, ctypes.py_object(SystemExit))
 
     def minFun(self):
         self.showMinimized()
 
     def closeFun(self):
         self.close()
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(threadid, ctypes.py_object(SystemExit))
 
     def getData(self):
         print('1')
@@ -401,49 +554,19 @@ class MyWindow(QMainWindow, Ui_mainWindow):
     def dialog(self):
         QMessageBox.information(self, "提示", "请填写【设置】功能中的必选页面", QMessageBox.Yes)
 
-    def timeDialog(self):
+    def delayDialog(self):
         QMessageBox.information(self, "提示", "不在设定时间范围，稍后程序将准时执行", QMessageBox.Yes)
-
-    def custom_right_menu_step2(self, pos):
-        menu = QMenu()
-        opt1 = menu.addAction("设置读取数据路径")
-        action = menu.exec_(self.step2Label.mapToGlobal(pos))
-        if action == opt1:
-            self.getData()
-        else:
-            print('2')
-
-    def custom_right_menu_step4(self, pos):
-        menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
-        action = menu.exec_(self.step4Label.mapToGlobal(pos))
-        if action == opt1:
-            self.step4Changed()
-        elif action == opt2:
-            frame = QImage('image/loadF.png')
-            imgw, imgh = frame.width(), frame.height()
-            lbw, lbh = self.step4Label.width(), self.step4Label.height()
-            rew, reh = int((lbh / imgh) * imgw), int(lbh)
-            size = QtCore.QSize(rew, reh)
-            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-            self.step4Label.setPixmap(pix)
-            QApplication.processEvents()
-        elif action == opt3:
-            self.timeDialog()
-        else:
-            print('4')
 
     def custom_right_menu_step5(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.step5Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.step5Changed()
-        elif action == opt2:
             frame = QImage('image/makeKeyF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.step5Label.width(), self.step5Label.height()
@@ -452,20 +575,36 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.step5Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(5)
+        elif action == opt2:
+            frame = QImage('image/makeKeyL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.step5Label.width(), self.step5Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.step5Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 5 in F:
+                F.remove(5)
         elif action == opt3:
-            self.timeDialog()
+            single = 1
+            self.step5Changed()
+        elif action == opt4:
+            self.step5Changed()
         else:
-            print('4')
+            print('cancel')
 
     def custom_right_menu_step6(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.step6Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.step6Changed()
-        elif action == opt2:
             frame = QImage('image/productF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.step6Label.width(), self.step6Label.height()
@@ -474,20 +613,36 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.step6Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(6)
+        elif action == opt2:
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.step6Label.width(), self.step6Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.step6Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 6 in F:
+                F.remove(6)
         elif action == opt3:
-            self.timeDialog()
+            single = 1
+            self.step6Changed()
+        elif action == opt4:
+            self.step6Changed()
         else:
-            print('4')
+            print('cancel')
 
     def custom_right_menu_step9(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.step9Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.step9Changed()
-        elif action == opt2:
             frame = QImage('image/mngF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.step9Label.width(), self.step9Label.height()
@@ -496,20 +651,36 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.step9Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(9)
+        elif action == opt2:
+            frame = QImage('image/mngL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.step9Label.width(), self.step9Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.step9Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 9 in F:
+                F.remove(9)
         elif action == opt3:
-            self.timeDialog()
+            single = 1
+            self.step9Changed()
+        elif action == opt4:
+            self.step9Changed()
         else:
-            print('4')
+            print('cancel')
 
     def custom_right_menu_step10(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.step10Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.step10Changed()
-        elif action == opt2:
             frame = QImage('image/sendF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.step10Label.width(), self.step10Label.height()
@@ -518,36 +689,34 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.step10Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(10)
+        elif action == opt2:
+            frame = QImage('image/sendL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.step10Label.width(), self.step10Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.step10Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 10 in F:
+                F.remove(10)
         elif action == opt3:
-            self.timeDialog()
+            single = 1
+            self.step10Changed()
+        elif action == opt4:
+            self.step10Changed()
         else:
-            print('4')
-
-    def custom_right_menu_step7(self, pos):
-        menu = QMenu()
-        opt1 = menu.addAction("设置等待时间")
-        action = menu.exec_(self.step7Label.mapToGlobal(pos))
-        if action == opt1:
-            self.timeDialog()
-        else:
-            print('2')
-
-    def custom_right_menu_step11(self, pos):
-        menu = QMenu()
-        opt1 = menu.addAction("设置等待时间")
-        action = menu.exec_(self.step11Label.mapToGlobal(pos))
-        if action == opt1:
-            self.timeDialog()
-        else:
-            print('2')
-
+            print('cancel')
 
     def custom_right_menu_wait1(self, pos):
         menu = QMenu()
         opt1 = menu.addAction("设置等待时间")
         action = menu.exec_(self.arrows2LongLabel.mapToGlobal(pos))
+        global w1
         if action == opt1:
-            self.timeDialog()
+            w1 = self.timeDialog()
+            w1 = float(w1)
         else:
             print('2')
 
@@ -555,8 +724,10 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         menu = QMenu()
         opt1 = menu.addAction("设置等待时间")
         action = menu.exec_(self.arrows7LongLabel.mapToGlobal(pos))
+        global w2
         if action == opt1:
-            self.timeDialog()
+            w2 = self.timeDialog()
+            w2 = float(w2)
         else:
             print('2')
 
@@ -564,42 +735,72 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         menu = QMenu()
         opt1 = menu.addAction("设置等待时间")
         action = menu.exec_(self.arrows11LongLabel.mapToGlobal(pos))
+        global w3
         if action == opt1:
-            self.timeDialog()
+            w3 = self.timeDialog()
+            w3 = float(w3)
+        else:
+            print('2')
+
+    def custom_right_menu_T2w1(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("设置等待时间")
+        action = menu.exec_(self.T2arrows4LongLabel.mapToGlobal(pos))
+        global tw1
+        if action == opt1:
+            tw1 = self.timeDialog()
+            tw1 = float(tw1)
         else:
             print('2')
 
     def custom_right_menu_T2s2(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.T2step2Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.Tstep2Changed()
-        elif action == opt2:
             frame = QImage('image/productF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.T2step2Label.width(), self.T2step2Label.height()
             rew, reh = int((lbh / imgh) * imgw), int(lbh)
             size = QtCore.QSize(rew, reh)
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-            self.step9Label.setPixmap(pix)
+            self.T2step2Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(22)
+        elif action == opt2:
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.T2step2Label.width(), self.T2step2Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.T2step2Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 22 in F:
+                F.remove(22)
         elif action == opt3:
+            single = 1
+            self.Tstep2Changed()
+        elif action == opt4:
             self.Tstep2Changed()
         else:
-            print('4')
+            print('cancel')
 
     def custom_right_menu_T2s3(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.T2step3Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.Tstep3Changed()
-        elif action == opt2:
             frame = QImage('image/productF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.T2step3Label.width(), self.T2step3Label.height()
@@ -608,20 +809,36 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.T2step3Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(23)
+        elif action == opt2:
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.T2step3Label.width(), self.T2step3Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.T2step3Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 23 in F:
+                F.remove(23)
         elif action == opt3:
+            single = 1
+            self.Tstep3Changed()
+        elif action == opt4:
             self.Tstep3Changed()
         else:
-            print('4')
+            print('cancel')
 
     def custom_right_menu_T2s6(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.T2step6Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.Tstep6Changed()
-        elif action == opt2:
             frame = QImage('image/productF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.T2step6Label.width(), self.T2step6Label.height()
@@ -630,20 +847,36 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.T2step6Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(26)
+        elif action == opt2:
+            frame = QImage('image/productL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.T2step6Label.width(), self.T2step6Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.T2step6Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 26 in F:
+                F.remove(26)
         elif action == opt3:
+            single = 1
+            self.Tstep6Changed()
+        elif action == opt4:
             self.Tstep6Changed()
         else:
-            print('4')
+            print('cancel')
 
     def custom_right_menu_T2s7(self, pos):
         menu = QMenu()
-        opt1 = menu.addAction("单步重做")
-        opt2 = menu.addAction("禁用")
-        opt3 = menu.addAction("继续执行")
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
         action = menu.exec_(self.T2step7Label.mapToGlobal(pos))
+        global single
+        global F
         if action == opt1:
-            self.Tstep7Changed()
-        elif action == opt2:
             frame = QImage('image/mngF.png')
             imgw, imgh = frame.width(), frame.height()
             lbw, lbh = self.T2step7Label.width(), self.T2step7Label.height()
@@ -652,12 +885,30 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
             self.T2step7Label.setPixmap(pix)
             QApplication.processEvents()
+            F.append(27)
+        elif action == opt2:
+            frame = QImage('image/mngL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.T2step7Label.width(), self.T2step7Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.T2step7Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 27 in F:
+                F.remove(27)
         elif action == opt3:
+            single = 1
+            self.Tstep7Changed()
+        elif action == opt4:
             self.Tstep7Changed()
         else:
-            print('4')
+            print('cancel')
 
     def step1Changed(self):
+        global threadid
+        threadid = threading.currentThread().ident
+        print('ct', threadid)
         frame = QImage('image/startD.png')
         imgw, imgh = frame.width(), frame.height()
         lbw, lbh = self.step1Label.width(), self.step1Label.height()
@@ -680,8 +931,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step1Label.setPixmap(pix)
         QApplication.processEvents()
 
-        time.sleep(2)
-
         frame = QImage('image/readD.png')
         imgw, imgh = frame.width(), frame.height()
         lbw, lbh = self.step2Label.width(), self.step2Label.height()
@@ -703,7 +952,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step2Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/arrowsLongD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -714,7 +962,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.arrows2LongLabel.setPixmap(pix)
         QApplication.processEvents()
         print('w1')
-        time.sleep(2)
+        time.sleep(w1 * 60)
         self.s.step3.emit()
 
     def step3Changed(self):
@@ -726,7 +974,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.arrows2LongLabel.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/setupD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -749,22 +996,30 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step3Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
+        try:
+            if 4 not in F:
+                frame = QImage('image/loadD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step4Label.width(), self.step4Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step4Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s4')
+                threading.Thread(target=DaochuShujuThread, args=(
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                    o32PW, year, month, day,
+                    blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                    jijinListTotal,
+                    jijinListSelected)).start()
+            elif 4 in F:
+                self.s.step5.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('4')
+            fwc.close()
 
-        frame = QImage('image/loadD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.step4Label.width(), self.step4Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.step4Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s4')
-        time.sleep(2)
-        threading.Thread(target=DaochuShujuThread, args=(
-        self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
-        blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-        jijinListSelected)).start()
 
     def step5Changed(self):
         frame = QImage('image/loadL.png')
@@ -775,21 +1030,30 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step4Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
+        try:
+            if 5 not in F:
+                frame = QImage('image/makeKeyD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step5Label.width(), self.step5Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step5Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s5')
+                time.sleep(2)
+                threading.Thread(target=ZhizuoPingzhengThread, args=(
+                self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                o32PW, year, month, day,
+                blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                jijinListTotal, jijinListSelected)).start()
+            elif 5 in F:
+                self.s.step6.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('9')
+            fwc.close()
 
-        frame = QImage('image/makeKeyD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.step5Label.width(), self.step5Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.step5Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s5')
-        time.sleep(2)
-        threading.Thread(target=ZhizuoPingzhengThread, args=(self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day,
-        blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
-        jijinListTotal, jijinListSelected)).start()
 
     def step6Changed(self):
         frame = QImage('image/makeKeyL.png')
@@ -800,23 +1064,32 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step5Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
+        try:
+            if 6 not in F:
+                frame = QImage('image/productD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step6Label.width(), self.step6Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step6Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s6')
+                time.sleep(2)
+                threading.Thread(target=ShengchengGuzhibiaoThread, args=(
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                    o32PW, year, month,
+                    day,
+                    blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                    jijinListTotal,
+                    jijinListSelected)).start()
+            elif 6 in F:
+                self.s.step7.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('6')
+            fwc.close()
 
-        frame = QImage('image/productD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.step6Label.width(), self.step6Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.step6Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s6')
-        time.sleep(2)
-        threading.Thread(target=ShengchengGuzhibiaoThread, args=(
-            self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
-            day,
-            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
 
     def step7Changed(self):
         frame = QImage('image/productL.png')
@@ -827,7 +1100,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step6Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/quitD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -850,7 +1122,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step7Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/arrowsLongD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -861,7 +1132,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.arrows7LongLabel.setPixmap(pix)
         QApplication.processEvents()
         print('w2')
-        time.sleep(2)
+        time.sleep(w2 * 60)
         self.s.step8.emit()
 
     def step8Changed(self):
@@ -877,7 +1148,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.arrows7LongLabel.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/setupD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -900,23 +1170,30 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step8Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
+        try:
+            if 9 not in F:
+                frame = QImage('image/mngD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step9Label.width(), self.step9Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step9Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s9')
+                time.sleep(2)
+                threading.Thread(target=Guanli_DianziduizhangThread, args=(
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                    o32PW, year, month,day,
+                    blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                    jijinListTotal,jijinListSelected)).start()
+            elif 9 in F:
+                self.s.step10.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('9')
+            fwc.close()
 
-        frame = QImage('image/mngD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.step9Label.width(), self.step9Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.step9Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s9')
-        time.sleep(2)
-        threading.Thread(target=Guanli_DianziduizhangThread, args=(
-            self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
-            day,
-            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
 
     def step10Changed(self):
         frame = QImage('image/mngL.png')
@@ -927,22 +1204,50 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step9Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
-
-        frame = QImage('image/sendD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.step10Label.width(), self.step10Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.step10Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s10')
-
-        send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                            reciever_email, exPath + "/对帐结果管理.xls")
-        time.sleep(2)
-
+        try:
+            global single
+            if single == 0 and 10 not in F:
+                frame = QImage('image/sendD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step10Label.width(), self.step10Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step10Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s10')
+                time.sleep(2)
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email, exPath + "/对帐结果管理.xls")
+                self.s.step11.emit()
+            elif single == 1 and 10 not in F:
+                frame = QImage('image/sendD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step10Label.width(), self.step10Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step10Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s10')
+                time.sleep(2)
+                send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
+                                    reciever_email, exPath + "/对帐结果管理.xls")
+                single = 1
+                frame = QImage('image/sendL.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.step10Label.width(), self.step10Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.step10Label.setPixmap(pix)
+                QApplication.processEvents()
+            elif 10 in F:
+                self.s.step11.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('10')
+            fwc.close()
 
     def step11Changed(self):
         frame = QImage('image/sendL.png')
@@ -953,7 +1258,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step10Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/quitD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -976,7 +1280,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.step11Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/arrowsLong2D.png')
         imgw, imgh = frame.width(), frame.height()
@@ -989,6 +1292,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         print('w3')
         time.sleep(2)
         self.s.waittmp.emit()
+        time.sleep(w3 * 60)
 
     def waitTmpChanged(self):
         frame = QImage('image/arrowsLong2L.png')
@@ -999,12 +1303,13 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.arrows11LongLabel.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
-
-        if flagCir <= 3:
+        global flagCir
+        if flagCir <= 2:
             flagCir = flagCir + 1
             self.s.step8.emit()
         else:
+            self.arrows11Text.setText('循环3次')
+            QApplication.processEvents()
             self.tabWidget.setCurrentIndex(1)
             self.s.Tstep1.emit()
 
@@ -1040,24 +1345,31 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step1Label.setPixmap(pix)
         QApplication.processEvents()
-
-        time.sleep(2)
-
-        frame = QImage('image/productD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.T2step2Label.width(), self.T2step2Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.T2step2Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s2')
-        time.sleep(2)
-        threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(
-            self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
-            day,
-            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
+        try:
+            if 22 not in F:
+                frame = QImage('image/productD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.T2step2Label.width(), self.T2step2Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.T2step2Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s2')
+                time.sleep(2)
+                threading.Thread(target=Daochu_ZichanbaobiaoThread, args=(
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                    o32PW, year, month,
+                    day,
+                    blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                    jijinListTotal,
+                    jijinListSelected)).start()
+            elif 22 in F:
+                self.s.Tstep3.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('13')
+            fwc.close()
 
     def Tstep3Changed(self):
         frame = QImage('image/productL.png')
@@ -1068,23 +1380,32 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step2Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
+        try:
+            if 23 not in F:
+                frame = QImage('image/productD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.T2step3Label.width(), self.T2step3Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.T2step3Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('w1')
+                time.sleep(2)
+                threading.Thread(target=Daochu_ToucunThread, args=(
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                    o32PW, year, month,
+                    day,
+                    blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                    jijinListTotal,
+                    jijinListSelected)).start()
+            elif 23 in F:
+                self.s.Tstep4.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('14')
+            fwc.close()
 
-        frame = QImage('image/productD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.T2step3Label.width(), self.T2step3Label.height()
-        rew, reh = int((lbh / imgh) * imgw * ascale), int(lbh * ascale)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.T2step3Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('w1')
-        time.sleep(2)
-        threading.Thread(target=Daochu_ToucunThread, args=(
-            self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
-            day,
-            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
 
     def Tstep4Changed(self):
         frame = QImage('image/productL.png')
@@ -1095,7 +1416,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step3Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/quitD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -1118,7 +1438,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step4Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/arrowsLongD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -1129,19 +1448,18 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.T2arrows4LongLabel.setPixmap(pix)
         QApplication.processEvents()
         print('w1')
-        time.sleep(2)
+        time.sleep(tw1 * 60)
         self.s.Tstep5.emit()
 
     def Tstep5Changed(self):
         frame = QImage('image/arrowsLongL.png')
         imgw, imgh = frame.width(), frame.height()
         lbw, lbh = self.T2arrows4LongLabel.width(), self.T2arrows4LongLabel.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
+        rew, reh = int((lbh / imgh) * imgw * ascale), int(lbh * ascale)
         size = QtCore.QSize(rew, reh)
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2arrows4LongLabel.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/setupD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -1164,23 +1482,31 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step5Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
-
-        frame = QImage('image/productD.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.T2step6Label.width(), self.T2step6Label.height()
-        rew, reh = int((lbh / imgh) * imgw), int(lbh)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.T2step6Label.setPixmap(pix)
-        QApplication.processEvents()
-        print('s6')
-        time.sleep(2)
-        threading.Thread(target=Daochu_JijinbaobiaoThread, args=(
-            self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month,
-            day,
-            blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal,
-            jijinListSelected)).start()
+        try:
+            if 26 not in F:
+                frame = QImage('image/productD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.T2step6Label.width(), self.T2step6Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.T2step6Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s6')
+                time.sleep(2)
+                threading.Thread(target=Daochu_JijinbaobiaoThread, args=(
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
+                    o32PW, year, month,
+                    day,
+                    blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
+                    jijinListTotal,
+                    jijinListSelected)).start()
+            elif 26 in F:
+                self.s.Tstep7.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('17')
+            fwc.close()
 
 
     def Tstep7Changed(self):
@@ -1192,9 +1518,31 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step6Label.setPixmap(pix)
         QApplication.processEvents()
-        time.sleep(2)
+        try:
+            if 27 not in F:
+                frame = QImage('image/mngD.png')
+                imgw, imgh = frame.width(), frame.height()
+                lbw, lbh = self.T2step7Label.width(), self.T2step7Label.height()
+                rew, reh = int((lbh / imgh) * imgw), int(lbh)
+                size = QtCore.QSize(rew, reh)
+                pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+                self.T2step7Label.setPixmap(pix)
+                QApplication.processEvents()
+                print('s7')
+                time.sleep(2)
+                threading.Thread(target=hebing_excel, args=(
+                    self, exPath + "\\核对净值示范空表.xlsx", exPath + "\\现金头寸预测汇总表.xls",
+                    exPath + "\\资产情况统计表.xls", exPath + "\\shuchu.xls")).start()
+            elif 27 in F:
+                self.s.Tstep8.emit()
+        except:
+            fwc = open('catch.txt', 'w', encoding='utf8')
+            fwc.write('18')
+            fwc.close()
 
-        frame = QImage('image/mngD.png')
+
+    def Tstep8Changed(self):
+        frame = QImage('image/mngL.png')
         imgw, imgh = frame.width(), frame.height()
         lbw, lbh = self.T2step7Label.width(), self.T2step7Label.height()
         rew, reh = int((lbh / imgh) * imgw), int(lbh)
@@ -1202,25 +1550,6 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2step7Label.setPixmap(pix)
         QApplication.processEvents()
-        print('s7')
-        time.sleep(2)
-
-        threading.Thread(target=hebing_excel, args=(
-            self, exPath+"\\核对净值示范空表.xlsx", exPath+"\\现金头寸预测汇总表.xls",
-            exPath+"\\资产情况统计表.xls", exPath+"\\shuchu.xls")).start()
-
-        self.s.Tstep8.emit()
-
-    def Tstep8Changed(self):
-        frame = QImage('image/mngL.png')
-        imgw, imgh = frame.width(), frame.height()
-        lbw, lbh = self.T2step7Label.width(), self.T2step7Label.height()
-        rew, reh = int((lbh / imgh) * imgw * a1scale), int(lbh * a1scale)
-        size = QtCore.QSize(rew, reh)
-        pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
-        self.T2step7Label.setPixmap(pix)
-        QApplication.processEvents()
-        time.sleep(2)
 
         frame = QImage('image/quitD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -1243,6 +1572,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         QApplication.processEvents()
         print('s8')
         time.sleep(2)
+
+        global F
+        F = []
 
 class SettingWindow(QMainWindow, Ui_SettingWindows):
     def __init__(self, parent=None):
@@ -1359,6 +1691,8 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         global blacklist
         global jijinListTotal
         global jijinListSelected
+
+        global catch
 
         try:
             tf = 0
