@@ -11,7 +11,7 @@ def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, 
                          year, month, day, blacklist, email_server_url, email_server_port, sender_email,
                          sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys, SendKeys
+    from pywinauto.keyboard import SendKeys
     from pywinauto import timings
     from time import sleep
     from pywinauto import mouse
@@ -36,11 +36,11 @@ def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, 
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
     sleep(2)
 
     # 选择基金
@@ -72,7 +72,7 @@ def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, 
                 app["基金资产估值表Dialog"]["确定"].click()
                 status = False
             else:
-                #send_keys("{ENTER}")
+                #SendKeys("{ENTER}")
                 fuck.click()
                 sleep(1)
         except Exception:

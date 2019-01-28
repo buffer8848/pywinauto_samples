@@ -12,7 +12,7 @@ def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cw
                  year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd,
                  reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys, SendKeys
+    from pywinauto.keyboard import SendKeys
     from pywinauto import mouse
     from pywinauto import timings
     from time import sleep
@@ -36,12 +36,12 @@ def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cw
 
     # #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
-    send_keys("{ENTER}")
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
+    SendKeys("{ENTER}")
     sleep(2)
 
     #输入文件路径

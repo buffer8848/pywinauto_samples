@@ -19,6 +19,7 @@ def process_app_login(app, gzName, gzPW):
     dlg_login["Edit2"].click() #选中一下才能登陆
     sleep(1)
     dlg_login["Edit3"].set_focus()
+    sleep(1)
     dlg_login["Edit3"].set_text(gzPW)
     dlg_login["登录(&L)"].click()
     sleep(1)

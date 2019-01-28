@@ -11,7 +11,7 @@ def Zhizuo_pingzheng(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW
                      year, month, day, blacklist, email_server_url, email_server_port, sender_email,
                      sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys, SendKeys
+    from pywinauto.keyboard import SendKeys
     from pywinauto import timings
     from time import sleep
     from pywinauto import mouse
@@ -35,11 +35,11 @@ def Zhizuo_pingzheng(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
-    send_keys(year)
-    send_keys("{RIGHT}")
-    send_keys(month)
-    send_keys("{RIGHT}")
-    send_keys(day)
+    SendKeys(year)
+    SendKeys("{RIGHT}")
+    SendKeys(month)
+    SendKeys("{RIGHT}")
+    SendKeys(day)
     sleep(2)
 
     # 选择基金
@@ -65,7 +65,7 @@ def Zhizuo_pingzheng(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW
                     status = False
             except Exception:
                 None
-            #send_keys("{ENTER}")
+            #SendKeys("{ENTER}")
             try:
                 app.top_window()["是(Y)"].set_focus()
                 app.top_window()["是(Y)"].click()
