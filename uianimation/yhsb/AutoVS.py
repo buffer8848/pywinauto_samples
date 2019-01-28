@@ -1184,11 +1184,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
                 time.sleep(2)
                 threading.Thread(target=Guanli_DianziduizhangThread, args=(
                     self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
-                    o32PW, year, month,
-                    day,
+                    o32PW, year, month,day,
                     blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
-                    jijinListTotal,
-                    jijinListSelected)).start()
+                    jijinListTotal,jijinListSelected)).start()
             elif 9 in F:
                 self.s.step10.emit()
         except:

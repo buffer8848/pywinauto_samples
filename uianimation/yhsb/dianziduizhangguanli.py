@@ -12,7 +12,7 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
 	o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, 
 	sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys
+    from pywinauto.keyboard import SendKeys
     from pywinauto import timings
     from time import sleep
 
@@ -53,7 +53,7 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
     dlg_main["基金列表>>"].set_focus()
     dlg_main["基金列表>>"].click()
     sleep(2)
-    choose_jijin_in_list(jijinListTotal, jijinListSelected, "")
+    choose_jijin_in_list(jijinListTotal, jijinListSelected, fundName, False, True)
 
     #点击查询等待结果输出
     dlg_main["查询"].set_focus()
