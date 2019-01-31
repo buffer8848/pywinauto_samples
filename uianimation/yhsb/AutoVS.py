@@ -68,10 +68,7 @@ confName = ''
 threadid = 0
 single = 0
 F = []
-w1 = 0.03
-w2 = 0.03
 w3 = 0.03
-tw1 = 0.03
 
 def getConf():
     readconf = open('conf.txt', 'r', encoding='gbk')
@@ -123,7 +120,7 @@ def setValue():
     global jijinListTotal
     global jijinListSelected
 
-    global catch
+    global w3
 
     if flag == 1:
         dataPath = dictC['选取基金列表']
@@ -170,6 +167,8 @@ def setValue():
             data = pd.DataFrame(data)
             jijinListTotal = list(data['基金'])
             jijinListSelected = list(data['可选基金'])
+
+        w3 = float(dictC['循环间隔时间'])
 
         return flag
     else:
@@ -430,8 +429,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.min.clicked.connect(self.minFun)
         self.quit.clicked.connect(self.closeFun)
         self.startButton.clicked.connect(self.on_click)
-        self.PauseButton.clicked.connect(self.pause_click)
         self.quitButton.clicked.connect(self.quit_click)
+        self.step4Label.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.step4Label.customContextMenuRequested.connect(self.custom_right_menu_step4)
         self.step5Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.step5Label.customContextMenuRequested.connect(self.custom_right_menu_step5)
         self.step6Label.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -440,12 +440,12 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.step9Label.customContextMenuRequested.connect(self.custom_right_menu_step9)
         self.step10Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.step10Label.customContextMenuRequested.connect(self.custom_right_menu_step10)
-        self.arrows2LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.arrows2LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait1)
-        self.arrows7LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.arrows7LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait2)
-        self.arrows11LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.arrows11LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait3)
+        # self.arrows2LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.arrows2LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait1)
+        # self.arrows7LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.arrows7LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait2)
+        # self.arrows11LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.arrows11LongLabel.customContextMenuRequested.connect(self.custom_right_menu_wait3)
         self.T2step2Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.T2step2Label.customContextMenuRequested.connect(self.custom_right_menu_T2s2)
         self.T2step3Label.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -454,8 +454,8 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.T2step6Label.customContextMenuRequested.connect(self.custom_right_menu_T2s6)
         self.T2step7Label.setContextMenuPolicy(Qt.CustomContextMenu)
         self.T2step7Label.customContextMenuRequested.connect(self.custom_right_menu_T2s7)
-        self.T2arrows4LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.T2arrows4LongLabel.customContextMenuRequested.connect(self.custom_right_menu_T2w1)
+        # self.T2arrows4LongLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.T2arrows4LongLabel.customContextMenuRequested.connect(self.custom_right_menu_T2w1)
 
         self.s.step1.connect(self.step1Changed)
         self.s.step2.connect(self.step2Changed)
@@ -545,17 +545,59 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         directory, filetype = QFileDialog.getOpenFileName(self, "选取文件", "C:/")  # 设置文件扩展名过滤,注意用双分号间隔
         print(directory, filetype)
 
-    def timeDialog(self):
-        text, ok = QInputDialog.getText(self, '设置等待时间', '请输入等待分钟数:')
-        if ok:
-            print(text)
-            return text
+    # def timeDialog(self):
+    #     try:
+    #         text, ok = QInputDialog.getText(self, '设置等待时间', '请输入等待分钟数:')
+    #         if ok:
+    #             print(text)
+    #             return text
+    #     except:
+    #         print('error')
+    #         return '0'
 
     def dialog(self):
         QMessageBox.information(self, "提示", "请填写【设置】功能中的必选页面", QMessageBox.Yes)
 
     def delayDialog(self):
         QMessageBox.information(self, "提示", "不在设定时间范围，稍后程序将准时执行", QMessageBox.Yes)
+
+    def custom_right_menu_step4(self, pos):
+        menu = QMenu()
+        opt1 = menu.addAction("禁用")
+        opt2 = menu.addAction("启用")
+        opt3 = menu.addAction("单步重做")
+        opt4 = menu.addAction("继续执行")
+        action = menu.exec_(self.step4Label.mapToGlobal(pos))
+        global single
+        global F
+        if action == opt1:
+            frame = QImage('image/loadF.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.step4Label.width(), self.step4Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.step4Label.setPixmap(pix)
+            QApplication.processEvents()
+            F.append(4)
+        elif action == opt2:
+            frame = QImage('image/loadL.png')
+            imgw, imgh = frame.width(), frame.height()
+            lbw, lbh = self.step4Label.width(), self.step4Label.height()
+            rew, reh = int((lbh / imgh) * imgw), int(lbh)
+            size = QtCore.QSize(rew, reh)
+            pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
+            self.step4Label.setPixmap(pix)
+            QApplication.processEvents()
+            if 4 in F:
+                F.remove(4)
+        elif action == opt3:
+            single = 1
+            self.step4Changed()
+        elif action == opt4:
+            self.step4Changed()
+        else:
+            print('cancel')
 
     def custom_right_menu_step5(self, pos):
         menu = QMenu()
@@ -962,7 +1004,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.arrows2LongLabel.setPixmap(pix)
         QApplication.processEvents()
         print('w1')
-        time.sleep(w1 * 60)
+        time.sleep(2)
         self.s.step3.emit()
 
     def step3Changed(self):
@@ -1132,7 +1174,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.arrows7LongLabel.setPixmap(pix)
         QApplication.processEvents()
         print('w2')
-        time.sleep(w2 * 60)
+        time.sleep(2)
         self.s.step8.emit()
 
     def step8Changed(self):
@@ -1184,9 +1226,11 @@ class MyWindow(QMainWindow, Ui_mainWindow):
                 time.sleep(2)
                 threading.Thread(target=Guanli_DianziduizhangThread, args=(
                     self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
-                    o32PW, year, month,day,
+                    o32PW, year, month,
+                    day,
                     blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
-                    jijinListTotal,jijinListSelected)).start()
+                    jijinListTotal,
+                    jijinListSelected)).start()
             elif 9 in F:
                 self.s.step10.emit()
         except:
@@ -1289,10 +1333,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.arrows11LongLabel.setPixmap(pix)
         QApplication.processEvents()
-        print('w3')
-        time.sleep(2)
-        self.s.waittmp.emit()
+        print('w3', w3)
         time.sleep(w3 * 60)
+        self.s.waittmp.emit()
 
     def waitTmpChanged(self):
         frame = QImage('image/arrowsLong2L.png')
@@ -1310,8 +1353,8 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         else:
             self.arrows11Text.setText('循环3次')
             QApplication.processEvents()
-            self.tabWidget.setCurrentIndex(1)
-            self.s.Tstep1.emit()
+            # self.tabWidget.setCurrentIndex(1)
+            # self.s.Tstep1.emit()
 
         frame = QImage('image/setupD.png')
         imgw, imgh = frame.width(), frame.height()
@@ -1448,7 +1491,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         self.T2arrows4LongLabel.setPixmap(pix)
         QApplication.processEvents()
         print('w1')
-        time.sleep(tw1 * 60)
+        time.sleep(2)
         self.s.Tstep5.emit()
 
     def Tstep5Changed(self):
@@ -1609,6 +1652,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
             self.Ssystem3.setText(o32Path)
             self.So32Name.setText(o32Name)
             self.So32PW.setText(o32PW)
+            self.ScrcTime.setText(str(w3))
 
             self.SblackList.setText('、'.join(blacklist))
 
@@ -1692,7 +1736,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
         global jijinListTotal
         global jijinListSelected
 
-        global catch
+        global w3
 
         try:
             tf = 0
@@ -1734,6 +1778,8 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
             o32Path = self.Ssystem3.text()
             o32Name = self.So32Name.text()
             o32PW = self.So32PW.text()
+
+            w3 = self.ScrcTime.text()
 
             bl = self.SblackList.toPlainText()
             blacklist = bl.split('、')
@@ -1777,6 +1823,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindows):
             fwdata = fwdata + '发送者邮箱密码：' + sender_passwd + '\n'
             fwdata = fwdata + '接受者邮箱账号：' + reciever_email + '\n\n'
             fwdata = fwdata + '黑名单：' + bl + '\n\n'
+            fwdata = fwdata + '循环间隔时间：' + str(w3) + '\n\n'
 
             fw.write(fwdata)
             print(fwdata)

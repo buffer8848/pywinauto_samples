@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab1">
      <attribute name="title">
@@ -610,6 +610,34 @@
       </property>
       <property name="text">
        <string>制作黑名单（以中文字符“、”分割，无需换行）：</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>循环间隔时间</string>
+     </attribute>
+     <widget class="QLineEdit" name="ScrcTime">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>110</y>
+        <width>301</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="crc">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>110</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>循环间隔时间：</string>
       </property>
      </widget>
     </widget>
