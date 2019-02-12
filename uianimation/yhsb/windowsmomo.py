@@ -61,9 +61,6 @@ class Ui_mainWindow(object):
         self.startButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.startButton.setObjectName("startButton")
         self.horizontalLayout.addWidget(self.startButton)
-        self.PauseButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.PauseButton.setObjectName("PauseButton")
-        self.horizontalLayout.addWidget(self.PauseButton)
         self.quitButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.quitButton.setObjectName("quitButton")
         self.horizontalLayout.addWidget(self.quitButton)
@@ -700,8 +697,6 @@ class Ui_mainWindow(object):
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton:
-
-
             self.move(event.globalPos() - self.dragPosition)
             event.accept()
 
@@ -711,7 +706,6 @@ class Ui_mainWindow(object):
         self.setTime.setText(_translate("mainWindow", "设置自动运行时间："))
         self.timeLabel2.setText(_translate("mainWindow", "-"))
         self.startButton.setText(_translate("mainWindow", "执行"))
-        self.PauseButton.setText(_translate("mainWindow", "暂停"))
         self.quitButton.setText(_translate("mainWindow", "终止"))
         self.workLabel.setText(_translate("mainWindow", "工作流程展示"))
         self.icon.setText(_translate("mainWindow", "AVS自动估值系统"))
@@ -1055,3 +1049,4 @@ class Ui_mainWindow(object):
         size = QtCore.QSize(rew, reh)
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2arrows4LongLabel.setPixmap(pix)
+
