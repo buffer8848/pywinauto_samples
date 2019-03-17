@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1070</width>
-    <height>879</height>
+    <width>1088</width>
+    <height>883</height>
    </rect>
   </property>
   <property name="font">
@@ -28,8 +28,8 @@
    <widget class="QWidget" name="horizontalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>142</x>
-      <y>70</y>
+      <x>152</x>
+      <y>80</y>
       <width>380</width>
       <height>71</height>
      </rect>
@@ -45,7 +45,7 @@
          <property name="font">
           <font>
            <family>黑体</family>
-           <pointsize>9</pointsize>
+           <pointsize>12</pointsize>
            <weight>50</weight>
            <bold>false</bold>
           </font>
@@ -58,25 +58,19 @@
       </layout>
      </item>
      <item>
-      <widget class="QTimeEdit" name="startTimeEdit"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="timeLabel2">
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTimeEdit" name="endTimeEdit"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QTimeEdit" name="startTimeEdit"/>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>70</y>
+      <x>560</x>
+      <y>80</y>
       <width>361</width>
       <height>71</height>
      </rect>
@@ -108,8 +102,8 @@
    <widget class="QLabel" name="workLabel">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>170</y>
+      <x>430</x>
+      <y>180</y>
       <width>231</width>
       <height>31</height>
      </rect>
@@ -117,9 +111,9 @@
     <property name="font">
      <font>
       <family>楷体</family>
-      <pointsize>17</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>20</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
@@ -132,8 +126,8 @@
    <widget class="QLabel" name="icon">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>20</y>
+      <x>60</x>
+      <y>30</y>
       <width>291</width>
       <height>21</height>
      </rect>
@@ -156,8 +150,8 @@
    <widget class="QPushButton" name="setting">
     <property name="geometry">
      <rect>
-      <x>960</x>
-      <y>20</y>
+      <x>970</x>
+      <y>30</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -175,8 +169,8 @@
    <widget class="QPushButton" name="min">
     <property name="geometry">
      <rect>
-      <x>1000</x>
-      <y>20</y>
+      <x>1010</x>
+      <y>30</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -194,8 +188,8 @@
    <widget class="QPushButton" name="quit">
     <property name="geometry">
      <rect>
-      <x>1040</x>
-      <y>20</y>
+      <x>1050</x>
+      <y>30</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -207,8 +201,8 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>200</y>
+      <x>70</x>
+      <y>210</y>
       <width>961</width>
       <height>641</height>
      </rect>
@@ -1266,8 +1260,8 @@
    <widget class="QLabel" name="iconpic">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>20</x>
+      <y>20</y>
       <width>31</width>
       <height>31</height>
      </rect>

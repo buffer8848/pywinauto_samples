@@ -33,12 +33,12 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
     dlg_main.set_focus()
     ctl_sysnvg = dlg_main["系统功能导航"]
     ctl_sysnvg.ThunderRT6UserControlDC6.click()
-    sleep(1)
+    sleep(2)
 
     #点击电子对账管理
     dlg_main.set_focus()
     dlg_main.menu_select("电子对帐 -> 对帐结果管理")
-    sleep(1)
+    sleep(2)
 
     #输入日期
     dlg_main["DTPicker20WndClass2"].set_focus()
@@ -85,8 +85,14 @@ def Guanli_dianziduizhang(exePath, imPath, exPath, fundName, gzPath, gzName, gzP
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email, exPath + "/对帐结果管理.xls")
-                sleep(300)
+                                    reciever_email, None, 0)
+                stt = True
+                while stt:
+                    sleep(60)
+                    if verify_control_exception(app.top_window(), blacklist):
+                        continue
+                    else:
+                        stt = False
                 
             try:
                 if app["导出EXCEL文件Dialog"]["确定"].exists():

@@ -33,3 +33,9 @@ def process_app_login(app, gzName, gzPW):
         app.top_window()["否(N)"].click()
     except Exception:
         None
+    try:
+        if app["套账数据表更新Dialog"].exists():
+            app.top_window()["取消"].set_focus()
+            app.top_window()["取消"].click()
+    except Exception:
+        None

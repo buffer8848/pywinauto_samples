@@ -10,7 +10,7 @@
 
 def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                  year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd,
-                 reciever_email, jijinListTotal, jijinListSelected):
+                 reciever_email, jijinListTotal, jijinListSelected, single, cntnDo):
     from pywinauto.application import Application
     from pywinauto.keyboard import SendKeys
     from pywinauto import mouse
@@ -20,12 +20,13 @@ def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cw
     from login import process_app_login
 
     # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
-    restart_if_app_exist(gzPath)
-    sleep(3)
+    # restart_if_app_exist(gzPath)
+    # sleep(3)
     app = Application(backend="win32").start(gzPath)
 
     process_app_login(app, gzName, gzPW)
     sleep(3)
+
 
     #打开数据管理
     dlg_main = app["ThunderRT6MDIForm"]
@@ -64,28 +65,45 @@ def Daochu_shuju(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cw
     dlg_main["读取数据"].set_focus()
     dlg_main["读取数据"].click()
     sleep(1)
-    while True: #等待保存成功后的弹窗
+    status = True
+    while status: #等待保存成功后的弹窗
+        sleep(1)
+        print(status)
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email, exPath + "/对帐结果管理.xls")
-                sleep(300)
+                                    reciever_email, None, 0)
+                stt = True
+                while stt:
+                    sleep(20)
+                    if verify_control_exception(app.top_window(), blacklist):
+                        continue
+                    else:
+                        stt = False
             try:
-                if app["数据接口管理Dialog"]["读取完毕"].exists():
-                    app["数据接口管理Dialog"].set_focus()
-                    app["数据接口管理Dialog"]["确定"].click()
-                    break
+                if app["数据接口管理Dialog"]["读取完成"].exists():
+                    print(3)
+                    status = False
             except Exception:
                 None
-            SendKeys("{ENTER}")
-            #app.top_window()["是(Y)"].set_focus()
-            #app.top_window()["是(Y)"].click()
-            sleep(1)
+            try:
+                app.top_window()["确定"].set_focus()
+                app.top_window()["确定"].click()
+            except Exception:
+                None
+            try:
+                app.top_window()["是(Y)"].set_focus()
+                app.top_window()["是(Y)"].click()
+            except Exception:
+                None
         except Exception:
             None
 
-    #退出
-    try:
-        dlg_main.close()
-    except timings.TimeoutError:
-        app.top_window()["是(Y)"].click()
+    # #退出
+    if single == 1:
+        try:
+            dlg_main.close()
+        except timings.TimeoutError:
+            app.top_window()["是(Y)"].click()
+    elif cntnDo == 1:
+        dlg_main["退    出"].click()

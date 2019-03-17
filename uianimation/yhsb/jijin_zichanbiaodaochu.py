@@ -60,19 +60,24 @@ def Daochu_jijinzichan(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, 
 
     #主界面出现
     dlg_main = app["TfrmMain"]
-
     dlg_main.wait('exists enabled visible ready')
 
+    #先选择菜单，再模拟点击
+    dlg_main.Static.TOutlookBar.TOutlookSection0.TreeView.wrapper_object().select("\\n综合信息查询")
+    sleep(1)
+    SendKeys("{ENTER}")
     #点击信息查询->综合信息查询
-    mouse.click(coords=(86,780)) #TODO
-    sleep(3)
-    mouse.click(coords=(68,311)) #TODO
+    #mouse.click(coords=(86,780)) #TODO
+    #sleep(3)
+    #mouse.click(coords=(68,311)) #TODO
     sleep(5)
 
     #等待综合信息查询界面出现
     #dlg_main["基金资产[4]"].wait('exists enabled visible ready')
     #dlg_main["基金资产[4]"].set_focus()
-    dlg_main["基金资产[4]"].click()
+    #dlg_main["基金资产[4]"].click()
+
+    sleep(1)
     mouse.click(coords=(324,118)) #TODO
     sleep(3)
     mouse.click(coords=(137,89)) #TODO

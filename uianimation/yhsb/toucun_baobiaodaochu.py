@@ -9,7 +9,7 @@
 
 def Daochu_toucunbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW, year, month, day, blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
     from pywinauto.application import Application
-    from pywinauto.keyboard import send_keys
+    from pywinauto.keyboard import SendKeys
     from pywinauto import mouse
     from pywinauto import timings
     from time import sleep
@@ -65,9 +65,14 @@ def Daochu_toucunbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email, exPath + "/对帐结果管理.xls")
-                sleep(300)
-
+                                    reciever_email, None, 0)
+                stt = True
+                while stt:
+                    sleep(60)
+                    if verify_control_exception(app.top_window(), blacklist):
+                        continue
+                    else:
+                        stt = False
             try:
                 if not dlg_main["Progress Bar"].exists():
                     break
@@ -86,18 +91,23 @@ def Daochu_toucunbaobiao(exePath, imPath, exPath, fundName, gzPath, gzName, gzPW
     dlg_outxls = app["输出EXCEL"]
     dlg_outxls.set_focus()
     dlg_outxls.Edit2.set_text(exPath)
-    dlg_outxls.Edit3.set_text(r"对帐结果管理.xls")
+    dlg_outxls.Edit3.set_text(r"现金头寸预测汇总表.xls")
     dlg_outxls["确 定"].click()
     sleep(2)
 
     #等待保存的进度条出现
     while True: #等待保存成功后的弹窗
         try:
-            if verify_control_exception(app.top_window(), []):
+            if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email, exPath + "/对帐结果管理.xls")
-                sleep(300)
-                
+                                    reciever_email, None, 0)
+                stt = True
+                while stt:
+                    sleep(60)
+                    if verify_control_exception(app.top_window(), blacklist):
+                        continue
+                    else:
+                        stt = False
             try:
                 app["导出EXCEL文件Dialog"]["是(Y)"].set_focus()
                 app["导出EXCEL文件Dialog"]["是(Y)"].click()

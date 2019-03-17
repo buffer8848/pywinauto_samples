@@ -9,7 +9,7 @@
 
 def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name, o32PW,
                          year, month, day, blacklist, email_server_url, email_server_port, sender_email,
-                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected):
+                         sender_passwd, reciever_email, jijinListTotal, jijinListSelected, single, cntnDo):
     from pywinauto.application import Application
     from pywinauto.keyboard import SendKeys
     from pywinauto import timings
@@ -18,18 +18,30 @@ def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, 
     from common import restart_if_app_exist, verify_control_exception, send_email_to_admin, choose_jijin_in_list
     from login import process_app_login
 
-    # exepath = r"C:\Program Files (x86)\赢时胜资产财务估值系统V2.5\YssGz.exe"
-    restart_if_app_exist(gzPath)
-    sleep(3)
+    # if (True): #外部加个参数控制是否需要重新登陆
+    #     restart_if_app_exist(gzPath)
+    #     sleep(3)
+    #     app = Application().start(gzPath)
+    #     #处理登录
+    #     process_app_login(app, gzName, gzPW)
+    # else:
+    #     app = Application(backend="win32").connect(path=gzPath)
+    #
+    # sleep(3)
 
-    app = Application().start(gzPath)
-
-    #处理登录
-    process_app_login(app, gzName, gzPW)
-    sleep(1)
+    if single == 1:
+        restart_if_app_exist(gzPath)
+        sleep(3)
+        app = Application().start(gzPath)
+        #处理登录
+        process_app_login(app, gzName, gzPW)
+    else:
+        app = Application(backend="win32").connect(path=gzPath)
+        print(app)
 
     #打开数据管理
     dlg_main = app["ThunderRT6MDIForm"]
+    dlg_main.set_focus()
     ctl_sysnvg = dlg_main["msvb_lib_toolbar"]
     ctl_sysnvg.click(coords=(415,15))
     sleep(1)
@@ -64,8 +76,15 @@ def Shengcheng_guzhibiao(exePath, imPath, exPath, jijinCurrent, gzPath, gzName, 
         try:
             if verify_control_exception(app.top_window(), blacklist):
                 send_email_to_admin("helloworld", email_server_url, email_server_port, sender_email, sender_passwd,
-                                    reciever_email, exPath + "/对帐结果管理.xls")
-                sleep(300)
+                                    reciever_email, None, 0)
+                stt = True
+                while stt:
+                    sleep(60)
+                    if verify_control_exception(app.top_window(), blacklist):
+                        continue
+                    else:
+                        stt = False
+
             fuck = app.top_window()["确定"]
             if app["基金资产估值表Dialog"]["产生完毕!"].exists():
                 app["基金资产估值表Dialog"].set_focus()

@@ -52,11 +52,11 @@ def choose_jijin_in_list(srclist, selectlist, jijinCurrent, currentflag=False, s
                 else:
                     SendKeys("{UP}")
                     v += 1
-                sleep(0.5)
+                sleep(1)
             SendKeys("{SPACE}")
             sleep(0.5)
             SendKeys("{ESC}")
-            sleep(0.5)
+            sleep(1)
     except Exception:
         None
 
@@ -65,9 +65,10 @@ def verify_control_exception(control, whitelist):
     for index in whitelist:
         try:
             control.set_focus()
-            if control.wrapper_object().texts().__str__().find(index) >= 0:
+            print(control.wrapper_object().texts())
+            if control.wrapper_object().texts().__str__().find(index) > 0:
                 return True
-            if control._ctrl_identifiers().values().__str__().find(index) >= 0:
+            if control._ctrl_identifiers().values().__str__().find(index) > 0:
                 return True
         except Exception:
             None
@@ -75,10 +76,14 @@ def verify_control_exception(control, whitelist):
 
 #对当前窗口进行截图
 def capture_current_screen():
-    None
+    from PIL import ImageGrab
+    imagepath = "tmp.jpg"
+    im = ImageGrab.grab()
+    im.save(imagepath, 'jpeg')
+    return imagepath
 
 #发送邮件通知到指定的帐户
-def send_email_to_admin(text, server, port, sender, pwd, reciever, attachfile):
+def send_email_to_admin(text, server, port, sender, pwd, reciever, attachfile, flag, times=0):
     import smtplib
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
@@ -91,22 +96,43 @@ def send_email_to_admin(text, server, port, sender, pwd, reciever, attachfile):
         smtpObj = smtplib.SMTP(server, port)
         smtpObj.login(sender, pwd)
 
-        # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
-        message = MIMEMultipart()
-        message['From'] = Header("自动化测试程序", 'utf-8')  # 发送者
-        message['To'] = Header("自动化使用者", 'utf-8')  # 接收者
+        if flag == 1:
+            # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
+            message = MIMEMultipart()
+            message['From'] = Header("自动化测试程序", 'utf-8')  # 发送者
+            message['To'] = Header("自动化使用者", 'utf-8')  # 接收者
 
-        subject = '自动化测试程序发生异常，请处理！'
-        message['Subject'] = Header(subject, 'utf-8')
-        message.attach(MIMEText(text))
+            subject = '第'+ str(times) +'次对账结果'
+            message['Subject'] = Header(subject, 'utf-8')
+            message.attach(MIMEText(text))
+        elif flag == 0:
+            message = MIMEMultipart()
+            message['From'] = Header("自动化测试程序", 'utf-8')  # 发送者
+            message['To'] = Header("自动化使用者", 'utf-8')  # 接收者
+
+            subject = '自动化测试程序发生异常，请处理！'
+            message['Subject'] = Header(subject, 'utf-8')
+            message.attach(MIMEText(text))
+        elif flag == 2:
+            # 三个参数：第一个为文本内容，第二个 plain 设置文本格式，第三个 utf-8 设置编码
+            message = MIMEMultipart()
+            message['From'] = Header("自动化测试程序", 'utf-8')  # 发送者
+            message['To'] = Header("自动化使用者", 'utf-8')  # 接收者
+
+            subject = '净值核对结果'
+            message['Subject'] = Header(subject, 'utf-8')
+            message.attach(MIMEText(text))
 
         # 带上二进制附件
+        if attachfile is None:
+            attachfile = capture_current_screen()
         if attachfile is not None:
             part = MIMEBase('application', 'octet-stream')  # 'octet-stream': binary data
             part.set_payload(open(attachfile, 'rb').read())
             encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(attachfile))
             message.attach(part)
+
         smtpObj.sendmail(sender, reciever, message.as_string())
     except Exception:
         print("Error: 无法发送邮件")
