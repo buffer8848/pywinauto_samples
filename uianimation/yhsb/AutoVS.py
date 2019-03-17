@@ -74,7 +74,6 @@ cntnDo = 0
 F = []
 w3 = 0.03
 
-
 def getConf():
     readconf = open('conf.txt', 'r', encoding='gbk')
     global dictC
@@ -624,7 +623,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         action = menu.exec_(self.step4Label.mapToGlobal(pos))
         global single
         global F
-        global cntnDo
+
         if action == opt1:
             frame = QImage('image/loadF.png')
             imgw, imgh = frame.width(), frame.height()
@@ -647,14 +646,9 @@ class MyWindow(QMainWindow, Ui_mainWindow):
             if 4 in F:
                 F.remove(4)
         elif action == opt3:
-            self.startButton.setEnabled(False)
-            QApplication.processEvents()
             single = 1
             self.step4Changed()
         elif action == opt4:
-            self.startButton.setEnabled(False)
-            QApplication.processEvents()
-            cntnDo = 1
             self.step4Changed()
         else:
             print('cancel')
@@ -1334,8 +1328,7 @@ class MyWindow(QMainWindow, Ui_mainWindow):
                 print('s9')
                 time.sleep(2)
                 threading.Thread(target=Guanli_DianziduizhangThread, args=(
-                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path,
-                    o32Name,
+                    self, dataPath, imPath, exPath, fundName, gzPath, gzName, gzPW, cwPath, cwName, cwPW, o32Path, o32Name,
                     o32PW, year, month,
                     day,
                     blacklist, email_server_url, email_server_port, sender_email, sender_passwd, reciever_email,
@@ -1463,8 +1456,8 @@ class MyWindow(QMainWindow, Ui_mainWindow):
         else:
             self.arrows11Text.setText('循环3次')
             QApplication.processEvents()
-            flagCir = 1
-            cntnDo = 0
+            # self.tabWidget.setCurrentIndex(1)
+            # self.s.Tstep1.emit()
 
             cntnDo = 0
 

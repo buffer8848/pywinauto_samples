@@ -1047,6 +1047,3 @@ class Ui_mainWindow(object):
         size = QtCore.QSize(rew, reh)
         pix = QPixmap.fromImage(frame.scaled(size, QtCore.Qt.IgnoreAspectRatio))
         self.T2arrows4LongLabel.setPixmap(pix)
-
-
-
